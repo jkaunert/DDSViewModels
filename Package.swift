@@ -19,14 +19,7 @@ let package = Package(
 			name: "DDSViewModels",
 			dependencies: []),
 		.testTarget(
-			name: "DDSViewModelsTests-UIKit",
-			dependencies: ["DDSViewModels", "DDSViewModelsTests-Common"]),
-		.testTarget(
-			name: "DDSViewModelsTests-Common",
-			dependencies: ["DDSViewModels"]),
-//		.testTarget(
-//			name: "DDSViewModelsTests-AppKit",
-//			dependencies: ["DDSViewModels", "DDSViewModelsTests-Common"]),
-		
+			name: "DDSViewModelsTests",
+			dependencies: ["DDSViewModels"]),	
 	]
 )

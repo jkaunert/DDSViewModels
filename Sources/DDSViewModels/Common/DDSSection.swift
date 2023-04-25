@@ -1,6 +1,6 @@
 import Foundation
 
-protocol Sectioning: Hashable {
+protocol DDSSection: Hashable {
 	associatedtype Section: Hashable
 	
 	var id: UUID { get set }

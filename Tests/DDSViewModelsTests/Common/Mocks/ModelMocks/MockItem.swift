@@ -1,4 +1,5 @@
 import Foundation
+@testable import DDSViewModels
 import XCTest
 
 public struct MockItem: Hashable {

@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "F337544B-D3C2-4521-A540-1EC043611428",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "DDSViewModelsTests",
+        "name" : "DDSViewModelsTests"
+      }
+    }
+  ],
+  "version" : 1
+}

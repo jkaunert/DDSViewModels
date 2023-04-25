@@ -1,7 +1,7 @@
 import XCTest
 @testable import DDSViewModels
 
-public struct MockSection: Sectioning {
+public struct MockSection: DDSSection {
 		
 	public var id = UUID()
 	public var title: String
