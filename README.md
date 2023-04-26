@@ -1,3 +1,3 @@
 # DDSViewModels
 
-Lightweight, generic NSDiffableDataSource-backed view models.
+Lightweight, generic NSDiffableDataSource-backed Table & Collection view models.
