@@ -3,11 +3,13 @@ import XCTest
 @testable import DDSViewModels
 
 final class UICollectionViewDDSTests: XCTestCase {
-
+	
+	private typealias Snapshot = NSDiffableDataSourceSnapshot<Int, Int>
+	
+	private var sut: UICollectionViewDiffableDataSource<Int, Int>!
 	private var collectionView: MockUICollectionView!
 	private var sutCell: FakeUICollectionViewCell!
-	private var sut: UICollectionViewDiffableDataSource<Int, Int>!
-	private var snapshot: NSDiffableDataSourceSnapshot<Int, Int>!
+	private var snapshot: Snapshot!
 	
 	override func setUpWithError() throws {
 		try super.setUpWithError()
@@ -16,7 +18,7 @@ final class UICollectionViewDDSTests: XCTestCase {
 		sut = UICollectionViewDiffableDataSource<Int, Int>(collectionView: collectionView) { _, _, _ in
 			self.sutCell
 		}
-		snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
+		snapshot = Snapshot()
 	}
 
 	

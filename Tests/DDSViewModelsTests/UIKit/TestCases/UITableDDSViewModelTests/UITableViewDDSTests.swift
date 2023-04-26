@@ -4,10 +4,12 @@ import XCTest
 
 final class UITableViewDDSTests: XCTestCase {
 	
+	private typealias Snapshot = NSDiffableDataSourceSnapshot<Int, Int>
+	
 	private var tableView: MockUITableView!
 	private var sutCell: UITableViewCell!
 	private var sut: UITableViewDiffableDataSource<Int, Int>!
-	private var snapshot: NSDiffableDataSourceSnapshot<Int, Int>!
+	private var snapshot: Snapshot!
 	
 	override func setUpWithError() throws {
 		try super.setUpWithError()
@@ -16,7 +18,7 @@ final class UITableViewDDSTests: XCTestCase {
 		sut = UITableViewDiffableDataSource<Int, Int>(tableView: tableView) { _, _, _ in
 			self.sutCell
 		}
-		snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
+		snapshot = Snapshot()
 	}
 	
 	override func tearDownWithError() throws {

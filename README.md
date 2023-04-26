@@ -1,3 +1,3 @@
 # DDSViewModels
 
-A description of this package.
+Lightweight, generic NSDiffableDataSource-backed view models.

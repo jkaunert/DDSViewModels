@@ -6,8 +6,8 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 	
 	private typealias DiffableDataSource = UICollectionViewDiffableDataSource<DummySection, DummyItem>
 	private typealias Snapshot = NSDiffableDataSourceSnapshot<DummySection, DummyItem>
-	private let testSection = DummySection(title: "mockSection")
-	private let mockItems: [DummyItem] = [
+	private let testSection = DummySection(title: "dummySection")
+	private let dummyItems: [DummyItem] = [
 		DummyItem(text: "dummy1"),
 		DummyItem(text: "dummy2"),
 		DummyItem(text: "dummy3"),
@@ -27,7 +27,7 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		sut = collectionVC.viewModel
 		collectionVC.loadViewIfNeeded()
 		dataSource = sut.diffableDataSource
-		snapshot = dataSource.snapshot()
+		snapshot = Snapshot()
 		
 	}
 	
@@ -60,7 +60,7 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		dataSource.apply(snapshot, completion: e1.fulfill)
 		wait(for: [e1], timeout: 1)
 		snapshot.appendSections([testSection])
-		snapshot.appendItems([mockItems[0]])
+		snapshot.appendItems([dummyItems[0]])
 		XCTAssertEqual(snapshot.numberOfItems, 1)
 
 		let e2 = expectation(description: "test_apply_whenAppendingItemsToMainSection_shouldDiffCorrectly() e2")
@@ -71,7 +71,7 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		let e3 = expectation(description: "test_apply_whenAppendingItemsToMainSection_shouldDiffCorrectly() e3")
 		dataSource.apply(snapshot, completion: e3.fulfill)
 		wait(for: [e3], timeout: 1)
-		snapshot.appendItems([mockItems[1]])
+		snapshot.appendItems([dummyItems[1]])
 		XCTAssertEqual(snapshot.numberOfItems, 2)
 
 		let e4 = expectation(description: "test_apply_whenAppendingItemsToMainSection_shouldDiffCorrectly() e4")
@@ -86,30 +86,30 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		dataSource.apply(snapshot, completion: e1.fulfill)
 		wait(for: [e1], timeout: 1)
 		snapshot.appendSections([testSection])
-		snapshot.appendItems([mockItems[0], mockItems[1]])
+		snapshot.appendItems([dummyItems[0], dummyItems[1]])
 		XCTAssertEqual(snapshot.numberOfItems, 2)
 
 		let e2 = expectation(description: "test_apply_whenRemovingItemsFromMainSection_shouldDiffCorrectly() e2")
 		dataSource.apply(snapshot, completion: e2.fulfill)
 		wait(for: [e2], timeout: 1)
-		snapshot.deleteItems([mockItems[0]])
+		snapshot.deleteItems([dummyItems[0]])
 		XCTAssertEqual(snapshot.numberOfItems, 1)
 
 		let e3 = expectation(description: "test_apply_whenRemovingItemsFromMainSection_shouldDiffCorrectly() e3")
 		dataSource.apply(snapshot, completion: e3.fulfill)
 		wait(for: [e3], timeout: 1)
 		snapshot.appendItems([
-			mockItems[1],
-			mockItems[2],
-			mockItems[3],
+			dummyItems[1],
+			dummyItems[2],
+			dummyItems[3],
 		])
-		snapshot.deleteItems([mockItems[2]])
+		snapshot.deleteItems([dummyItems[2]])
 		XCTAssertEqual(snapshot.numberOfItems, 2)
 
 		let e4 = expectation(description: "test_apply_whenRemovingItemsFromMainSection_shouldDiffCorrectly() e4")
 		dataSource.apply(snapshot, completion: e4.fulfill)
 		wait(for: [e4], timeout: 1)
-		snapshot.deleteItems([mockItems[3]])
+		snapshot.deleteItems([dummyItems[3]])
 		XCTAssertEqual(snapshot.numberOfItems, 1)
 	}
 
@@ -120,10 +120,10 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		wait(for: [e1], timeout: 1)
 		snapshot.appendSections([testSection])
 		snapshot.appendItems([
-			mockItems[0],
-			mockItems[2],
-			mockItems[3],
-			mockItems[4],
+			dummyItems[0],
+			dummyItems[2],
+			dummyItems[3],
+			dummyItems[4],
 		])
 		XCTAssertEqual(snapshot.numberOfItems, 4, "precondition")
 		snapshot.deleteAllItems()
@@ -133,7 +133,7 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 	func test_add() {
 		
 		let e1 = expectation(description: "test_add() e1")
-		sut.add([mockItems[0]], to: testSection) {
+		sut.add([dummyItems[0]], to: testSection) {
 			e1.fulfill()
 		}
 		wait(for: [e1], timeout: 1)
@@ -147,7 +147,7 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		XCTAssertEqual(sut.items.count, 1)
 		
 		let e3 = expectation(description: "test_add() e3")
-		sut.add([mockItems[1]], to: testSection) {
+		sut.add([dummyItems[1]], to: testSection) {
 			e3.fulfill()
 		}
 		wait(for: [e3], timeout: 0.001)
@@ -165,28 +165,28 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		
 		let e1 = expectation(description: "test_remove() e1")
 		sut.add([
-			mockItems[0],
-			mockItems[1],
-			mockItems[2],
-			mockItems[3],
+			dummyItems[0],
+			dummyItems[1],
+			dummyItems[2],
+			dummyItems[3],
 		], to: testSection)
 	
 		XCTAssertEqual(sut.items.count, 4, "precondition")
-		sut.remove([mockItems[0]], from: testSection) {
+		sut.remove([dummyItems[0]], from: testSection) {
 			e1.fulfill()
 		}
 		wait(for: [e1], timeout: 0.001)
 		XCTAssertEqual(sut.items.count, 3)
 		
 		let e2 = expectation(description: "test_remove() e2")
-		sut.remove([mockItems[2]], from: testSection) {
+		sut.remove([dummyItems[2]], from: testSection) {
 			e2.fulfill()
 		}
 		wait(for: [e2], timeout: 0.001)
 		XCTAssertEqual(sut.items.count, 2)
 		
 		let e3 = expectation(description: "test_remove() e3")
-		sut.remove([mockItems[1]], from: testSection) {
+		sut.remove([dummyItems[1]], from: testSection) {
 			e3.fulfill()
 		}
 		wait(for: [e3], timeout: 0.001)
@@ -208,9 +208,9 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		
 		snapshot.appendSections([testSection])
 		snapshot.appendItems([
-			mockItems[0],
-			mockItems[1],
-			mockItems[2],
+			dummyItems[0],
+			dummyItems[1],
+			dummyItems[2],
 		]
 		)
 		dataSource.apply(snapshot)
@@ -220,9 +220,9 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		XCTAssertEqual(
 			snapshot4.itemIdentifiers,
 			[
-				mockItems[0],
-				mockItems[1],
-				mockItems[2]
+				dummyItems[0],
+				dummyItems[1],
+				dummyItems[2]
 			])
 		
 		var snapshot5 = dataSource.snapshot()
@@ -231,9 +231,9 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		XCTAssertEqual(
 			snapshot5.itemIdentifiers,
 			[
-				mockItems[0],
-				mockItems[1],
-				mockItems[2]
+				dummyItems[0],
+				dummyItems[1],
+				dummyItems[2]
 			])
 		
 		var snapshot6 = dataSource.snapshot()
@@ -241,15 +241,15 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		XCTAssertEqual(
 			snapshot6.itemIdentifiers,
 			[
-				mockItems[0],
-				mockItems[1],
-				mockItems[2]
+				dummyItems[0],
+				dummyItems[1],
+				dummyItems[2]
 			])
 		snapshot6.appendSections([])
 		snapshot6.appendItems([
-			mockItems[3],
-			mockItems[4],
-			mockItems[5]
+			dummyItems[3],
+			dummyItems[4],
+			dummyItems[5]
 		])
 		dataSource.apply(snapshot6)
 		
@@ -258,12 +258,12 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		XCTAssertEqual(
 			snapshot7.itemIdentifiers,
 			[
-				mockItems[0],
-				mockItems[1],
-				mockItems[2],
-				mockItems[3],
-				mockItems[4],
-				mockItems[5],
+				dummyItems[0],
+				dummyItems[1],
+				dummyItems[2],
+				dummyItems[3],
+				dummyItems[4],
+				dummyItems[5],
 			])
 	}
 	
@@ -271,14 +271,14 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		
 		snapshot.appendSections([testSection])
 		snapshot.appendItems([
-			mockItems[0],
-			mockItems[1],
-			mockItems[2]
+			dummyItems[0],
+			dummyItems[1],
+			dummyItems[2]
 		], toSection: testSection)
 		dataSource.apply(snapshot)
-		XCTAssertEqual(dataSource.itemIdentifier(for: IndexPath(item: 0, section: 0)), mockItems[0])
-		XCTAssertEqual(dataSource.itemIdentifier(for: IndexPath(item: 1, section: 0)), mockItems[1])
-		XCTAssertEqual(dataSource.itemIdentifier(for: IndexPath(item: 2, section: 0)), mockItems[2])
+		XCTAssertEqual(dataSource.itemIdentifier(for: IndexPath(item: 0, section: 0)), dummyItems[0])
+		XCTAssertEqual(dataSource.itemIdentifier(for: IndexPath(item: 1, section: 0)), dummyItems[1])
+		XCTAssertEqual(dataSource.itemIdentifier(for: IndexPath(item: 2, section: 0)), dummyItems[2])
 		XCTAssertEqual(dataSource.itemIdentifier(for: IndexPath(item: 100, section: 100)), nil)
 	}
 
@@ -286,13 +286,13 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		
 		snapshot.appendSections([testSection])
 		snapshot.appendItems([
-			mockItems[0],
-			mockItems[1],
-			mockItems[2]
+			dummyItems[0],
+			dummyItems[1],
+			dummyItems[2]
 		], toSection: testSection)
 		dataSource.apply(snapshot)
-		XCTAssertEqual(dataSource.indexPath(for: mockItems[2]), IndexPath(item: 2, section: 0))
-		XCTAssertEqual(dataSource.indexPath(for: mockItems[0]), IndexPath(item: 0, section: 0))
+		XCTAssertEqual(dataSource.indexPath(for: dummyItems[2]), IndexPath(item: 2, section: 0))
+		XCTAssertEqual(dataSource.indexPath(for: dummyItems[0]), IndexPath(item: 0, section: 0))
 	}
 
 	func test_numberOfSections() {
@@ -300,9 +300,9 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		XCTAssertEqual(dataSource.numberOfSections(in: collectionVC.collectionView), 0, "precondition")
 		snapshot.appendSections([testSection])
 		snapshot.appendItems([
-			mockItems[0],
-			mockItems[1],
-			mockItems[2]
+			dummyItems[0],
+			dummyItems[1],
+			dummyItems[2]
 		], toSection: testSection)
 		dataSource.apply(snapshot)
 		XCTAssertEqual(dataSource.numberOfSections(in: collectionVC.collectionView), 1)
@@ -312,9 +312,9 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		
 		snapshot.appendSections([testSection])
 		snapshot.appendItems([
-			mockItems[0],
-			mockItems[1],
-			mockItems[2]
+			dummyItems[0],
+			dummyItems[1],
+			dummyItems[2]
 		], toSection: testSection)
 		dataSource.apply(snapshot)
 		XCTAssertEqual(dataSource.collectionView(collectionVC.collectionView, numberOfItemsInSection: 0), 3)
@@ -324,17 +324,17 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 
 		snapshot.appendSections([testSection])
 		snapshot.appendItems([
-			mockItems[0],
-			mockItems[1],
-			mockItems[2]
+			dummyItems[0],
+			dummyItems[1],
+			dummyItems[2]
 		], toSection: testSection)
 		dataSource.apply(snapshot)
 
 		let sutCell = collectionVC.collectionView.dequeueReusableCell(withReuseIdentifier: "FakeUICollectionViewCell", for: IndexPath(item: 0, section: 0)) as? FakeUICollectionViewCell
-		sutCell?.provide(mockItems[1])
+		sutCell?.provide(dummyItems[1])
 		
 		let dataSourceCell = collectionVC.collectionView.dataSource?.collectionView(collectionVC.collectionView, cellForItemAt:  IndexPath(item: 0, section: 0)) as? FakeUICollectionViewCell
-		dataSourceCell?.provide(mockItems[1])
+		dataSourceCell?.provide(dummyItems[1])
 		XCTAssertEqual(
 			dataSourceCell?.textLabel.text,
 			sutCell?.textLabel.text
@@ -345,9 +345,9 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		
 		snapshot.appendSections([testSection])
 		snapshot.appendItems([
-			mockItems[0],
-			mockItems[1],
-			mockItems[2]
+			dummyItems[0],
+			dummyItems[1],
+			dummyItems[2]
 		], toSection: testSection)
 		dataSource.apply(snapshot)
 		XCTAssertEqual(
