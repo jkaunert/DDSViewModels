@@ -11,7 +11,7 @@ open class UITableDDSViewModel<SectionType: Hashable, CellType: UITableViewCell 
 	var diffableDataSource: DiffableTableViewDataSource?
 	private var cellIdentifier: String
 	
-	init(tableView: UITableView,  cellReuseIdentifier: String) {
+	public init(tableView: UITableView,  cellReuseIdentifier: String) {
 		self.tableView = tableView
 		self.cellIdentifier = cellReuseIdentifier
 		super.init()

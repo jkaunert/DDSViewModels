@@ -11,7 +11,7 @@ open class UICollectionDDSViewModel<SectionType: Hashable, CellType: UICollectio
 	var diffableDataSource: DiffableDataSource?
 	private var cellIdentifier: String
 	
-	init(collectionView: UICollectionView,  cellReuseIdentifier: String) {
+	public init(collectionView: UICollectionView,  cellReuseIdentifier: String) {
 		self.collectionView = collectionView
 		self.cellIdentifier = cellReuseIdentifier
 		super.init()
