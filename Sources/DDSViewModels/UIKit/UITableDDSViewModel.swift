@@ -6,7 +6,7 @@ open class UITableDDSViewModel<SectionType: Hashable, CellType: UITableViewCell 
 	public typealias Item = CellType.Provided
 	public typealias Section = SectionType
 	public typealias DiffableTableViewDataSource = UITableViewDiffableDataSource<Section, Item>
-	private weak var tableView: UITableView?
+	public weak var tableView: UITableView?
 	@Published public var items: [Item] = .init([])
 	var diffableDataSource: DiffableTableViewDataSource?
 	private var cellIdentifier: String

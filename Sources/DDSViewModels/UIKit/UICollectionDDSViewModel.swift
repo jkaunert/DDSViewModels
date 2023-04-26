@@ -6,7 +6,7 @@ open class UICollectionDDSViewModel<SectionType: Hashable, CellType: UICollectio
 	public typealias Section = SectionType
 	public typealias Item = CellType.Provided
 	public typealias DiffableDataSource = UICollectionViewDiffableDataSource<Section, Item>
-	private weak var collectionView: UICollectionView?
+	public weak var collectionView: UICollectionView?
 	@Published public var items: [Item] = .init([])
 	var diffableDataSource: DiffableDataSource?
 	private var cellIdentifier: String
