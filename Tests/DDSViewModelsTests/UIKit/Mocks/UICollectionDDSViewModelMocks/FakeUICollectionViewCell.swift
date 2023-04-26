@@ -2,16 +2,16 @@
 import XCTest
 @testable import DDSViewModels
 
-class MockUICollectionViewCell: UICollectionViewCell {
+class FakeUICollectionViewCell: UICollectionViewCell {
 	let textLabel = UILabel()
 	let dateLabel = UILabel()
 }
 
-extension MockUICollectionViewCell: Providing {
+extension FakeUICollectionViewCell: Providing {
 	
-	public typealias Provided = MockItem
+	public typealias Provided = DummyItem
 	
-	public func provide(_ item: MockItem) {
+	public func provide(_ item: DummyItem) {
 		self.textLabel.text = item.text
 		self.dateLabel.text = item.formattedDate
 	}

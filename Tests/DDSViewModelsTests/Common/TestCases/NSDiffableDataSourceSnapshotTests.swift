@@ -1,5 +1,5 @@
-@testable import DDSViewModels
 import XCTest
+@testable import DDSViewModels
 
 final class NSDiffableDataSourceSnapshotTests: XCTestCase {
 	
@@ -7,17 +7,17 @@ final class NSDiffableDataSourceSnapshotTests: XCTestCase {
 		typealias Test = (initial: [Int], append: [Int], expected: [Int])
 
 		let tests: [Test] = [
-			([0, 1], [], [0, 1]),
-			([], [0, 1, 2], [0, 1, 2]),
-			([0, 1], [2, 3, 4], [0, 1, 2, 3, 4]),
-			([0, 1], [4, 3, 2], [0, 1, 4, 3, 2])
+			(initial: [0, 1], append: [], expected: [0, 1]),
+			(initial: [], append: [0, 1, 2], expected: [0, 1, 2]),
+			(initial: [0, 1], append: [2, 3, 4], expected: [0, 1, 2, 3, 4]),
+			(initial: [0, 1], append: [4, 3, 2], expected: [0, 1, 4, 3, 2])
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-			snapshot.appendSections(test.initial)
-			snapshot.appendSections(test.append)
-			XCTAssertEqual(snapshot.sectionIdentifiers, test.expected)
+			snapshot.appendSections($0.initial)
+			snapshot.appendSections($0.append)
+			XCTAssertEqual(snapshot.sectionIdentifiers, $0.expected)
 		}
 	}
 
@@ -25,17 +25,17 @@ final class NSDiffableDataSourceSnapshotTests: XCTestCase {
 		typealias Test = (initial: [Int], insert: [Int], before: Int, expected: [Int])
 
 		let tests: [Test] = [
-			([0, 1], [3, 4], 1, [0, 3, 4, 1]),
-			([0, 1], [3, 4], 0, [3, 4, 0, 1]),
-			([0, 1, 2], [3, 4], 2, [0, 1, 3, 4, 2]),
-			([0, 1, 2], [], 2, [0, 1, 2])
+			(initial: [0, 1], insert: [3, 4], before: 1, expected: [0, 3, 4, 1]),
+			(initial: [0, 1], insert: [3, 4], before: 0, expected: [3, 4, 0, 1]),
+			(initial: [0, 1, 2], insert: [3, 4], before: 2, expected: [0, 1, 3, 4, 2]),
+			(initial: [0, 1, 2], insert: [], before: 2, expected: [0, 1, 2])
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-			snapshot.appendSections(test.initial)
-			snapshot.insertSections(test.insert, beforeSection: test.before)
-			XCTAssertEqual(snapshot.sectionIdentifiers, test.expected)
+			snapshot.appendSections($0.initial)
+			snapshot.insertSections($0.insert, beforeSection: $0.before)
+			XCTAssertEqual(snapshot.sectionIdentifiers, $0.expected)
 		}
 	}
 
@@ -43,18 +43,18 @@ final class NSDiffableDataSourceSnapshotTests: XCTestCase {
 		typealias Test = (initial: [Int], insert: [Int], after: Int, expected: [Int])
 
 		let tests: [Test] = [
-			([0, 1], [3, 4], 1, [0, 1, 3, 4]),
-			([0, 1], [3, 4], 0, [0, 3, 4, 1]),
-			([0, 1, 2], [3, 4], 2, [0, 1, 2, 3, 4]),
-			([0, 1, 2], [], 2, [0, 1, 2]),
-			([0], [1], 0, [0, 1])
+			(initial: [0, 1], insert: [3, 4], after: 1, expected: [0, 1, 3, 4]),
+			(initial: [0, 1], insert: [3, 4], after: 0, expected: [0, 3, 4, 1]),
+			(initial: [0, 1, 2], insert: [3, 4], after: 2, expected: [0, 1, 2, 3, 4]),
+			(initial: [0, 1, 2], insert: [], after: 2, expected: [0, 1, 2]),
+			(initial: [0], insert: [1], after: 0, expected: [0, 1])
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-			snapshot.appendSections(test.initial)
-			snapshot.insertSections(test.insert, afterSection: test.after)
-			XCTAssertEqual(snapshot.sectionIdentifiers, test.expected)
+			snapshot.appendSections($0.initial)
+			snapshot.insertSections($0.insert, afterSection: $0.after)
+			XCTAssertEqual(snapshot.sectionIdentifiers, $0.expected)
 		}
 	}
 
@@ -62,19 +62,19 @@ final class NSDiffableDataSourceSnapshotTests: XCTestCase {
 		typealias Test = (initial: [Int], delete: [Int], expected: [Int])
 
 		let tests: [Test] = [
-			([0, 1], [1], [0]),
-			([0, 1], [0], [1]),
-			([0, 1, 2], [1], [0, 2]),
-			([0, 1], [1], [0]),
-			([], [1], []),
-			([0, 1], [100], [0, 1])
+			(initial: [0, 1], delete: [1], expected: [0]),
+			(initial: [0, 1], delete: [0], expected: [1]),
+			(initial: [0, 1, 2], delete: [1], expected: [0, 2]),
+			(initial: [0, 1], delete: [1], expected: [0]),
+			(initial: [], delete: [1], expected: []),
+			(initial: [0, 1], delete: [100], expected: [0, 1])
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-			snapshot.appendSections(test.initial)
-			snapshot.deleteSections(test.delete)
-			XCTAssertEqual(snapshot.sectionIdentifiers, test.expected)
+			snapshot.appendSections($0.initial)
+			snapshot.deleteSections($0.delete)
+			XCTAssertEqual(snapshot.sectionIdentifiers, $0.expected)
 		}
 	}
 
@@ -82,35 +82,35 @@ final class NSDiffableDataSourceSnapshotTests: XCTestCase {
 		typealias Test = (initial: [Int], move: Int, before: Int, expected: [Int])
 
 		let tests: [Test] = [
-			([0, 1], 1, 0, [1, 0]),
-			([0, 1, 2], 2, 0, [2, 0, 1]),
-			([0, 1, 2], 0, 2, [1, 0, 2]),
-			([0, 1, 2], 1, 2, [0, 1, 2])
+			(initial: [0, 1], move: 1, before: 0, expected: [1, 0]),
+			(initial: [0, 1, 2], move: 2, before: 0, expected: [2, 0, 1]),
+			(initial: [0, 1, 2], move: 0, before: 2, expected: [1, 0, 2]),
+			(initial: [0, 1, 2], move: 1, before: 2, expected: [0, 1, 2])
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-			snapshot.appendSections(test.initial)
-			snapshot.moveSection(test.move, beforeSection: test.before)
-			XCTAssertEqual(snapshot.sectionIdentifiers, test.expected)
+			snapshot.appendSections($0.initial)
+			snapshot.moveSection($0.move, beforeSection: $0.before)
+			XCTAssertEqual(snapshot.sectionIdentifiers, $0.expected)
 		}
 	}
 
-	func testmoveSection_afterSection_snapshotShouldHaveCorrectSections() {
+	func test_moveSection_afterSection_snapshotShouldHaveCorrectSections() {
 		typealias Test = (initial: [Int], move: Int, after: Int, expected: [Int])
 
 		let tests: [Test] = [
-			([0, 1], 0, 1, [1, 0]),
-			([0, 1, 2], 2, 0, [0, 2, 1]),
-			([0, 1, 2], 0, 2, [1, 2, 0]),
-			([0, 1, 2], 1, 0, [0, 1, 2])
+			(initial: [0, 1], move: 0, after: 1, expected: [1, 0]),
+			(initial: [0, 1, 2], move: 2, after: 0, expected: [0, 2, 1]),
+			(initial: [0, 1, 2], move: 0, after: 2, expected: [1, 2, 0]),
+			(initial: [0, 1, 2], move: 1, after: 0, expected: [0, 1, 2])
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-			snapshot.appendSections(test.initial)
-			snapshot.moveSection(test.move, afterSection: test.after)
-			XCTAssertEqual(snapshot.sectionIdentifiers, test.expected)
+			snapshot.appendSections($0.initial)
+			snapshot.moveSection($0.move, afterSection: $0.after)
+			XCTAssertEqual(snapshot.sectionIdentifiers, $0.expected)
 		}
 	}
 
@@ -126,14 +126,12 @@ final class NSDiffableDataSourceSnapshotTests: XCTestCase {
 			(initial: [2, 1, 0], reload: [0, 1], sections: [3, 2, 1])
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-			snapshot.appendSections(test.initial)
-			snapshot.reloadSections(test.initial)
-			
-			XCTAssertEqual(snapshot.sectionIdentifiers, test.initial)
-
-			XCTAssertEqual(snapshot.sectionIdentifiers.count, test.sections.count)
+			snapshot.appendSections($0.initial)
+			snapshot.reloadSections($0.initial)
+			XCTAssertEqual(snapshot.sectionIdentifiers, $0.initial)
+			XCTAssertEqual(snapshot.sectionIdentifiers.count, $0.sections.count)
 		}
 	}
 
@@ -141,18 +139,17 @@ final class NSDiffableDataSourceSnapshotTests: XCTestCase {
 		typealias Test = (initial: [Int], append: [Int], expected: [Int])
 
 		let tests: [Test] = [
-			([0, 1], [2, 3], [0, 1, 2, 3]),
-			([], [2, 3], [2, 3]),
-			([1], [0], [1, 0])
+			(initial: [0, 1], append: [2, 3], expected: [0, 1, 2, 3]),
+			(initial: [], append: [2, 3], expected: [2, 3]),
+			(initial: [1], append: [0], expected: [1, 0])
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
 			snapshot.appendSections([0, 1])
-			snapshot.appendItems(test.initial)
-			snapshot.appendItems(test.append)
-
-			XCTAssertEqual(snapshot.itemIdentifiers(inSection: 1), test.expected)
+			snapshot.appendItems($0.initial)
+			snapshot.appendItems($0.append)
+			XCTAssertEqual(snapshot.itemIdentifiers(inSection: 1), $0.expected)
 		}
 	}
 
@@ -160,24 +157,22 @@ final class NSDiffableDataSourceSnapshotTests: XCTestCase {
 		typealias Test = (initial: [[Int]], append: [Int], section: Int, expected: [[Int]])
 
 		let tests: [Test] = [
-			([[], [0, 1]], [2, 3], 1, [[], [0, 1, 2, 3]]),
-			([[], []], [2, 3], 1, [[], [2, 3]]),
-			([[], [1]], [0], 1, [[], [1, 0]]),
-			([[], [1]], [2], 0, [[2], [1]]),
-			([[], [1]], [2, 3], 0, [[2, 3], [1]]),
-			([[], []], [0], 0, [[0], []])
+			(initial: [[], [0, 1]], append: [2, 3], section: 1, [[], [0, 1, 2, 3]]),
+			(initial: [[], []], append: [2, 3], section: 1, expected: [[], [2, 3]]),
+			(initial: [[], [1]], append: [0], section: 1, expected: [[], [1, 0]]),
+			(initial: [[], [1]], append: [2], section: 0, expected: [[2], [1]]),
+			(initial: [[], [1]], append: [2, 3], section: 0, expected: [[2, 3], [1]]),
+			(initial: [[], []], append: [0], section: 0, expected: [[0], []])
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-			for (section, items) in test.initial.enumerated() {
+			for (section, items) in $0.initial.enumerated() {
 				snapshot.appendSections([section])
 				snapshot.appendItems(items)
 			}
-
-			snapshot.appendItems(test.append, toSection: test.section)
-
-			for (section, items) in test.expected.enumerated() {
+			snapshot.appendItems($0.append, toSection: $0.section)
+			for (section, items) in $0.expected.enumerated() {
 				XCTAssertEqual(snapshot.itemIdentifiers(inSection: section), items)
 			}
 		}
@@ -187,20 +182,20 @@ final class NSDiffableDataSourceSnapshotTests: XCTestCase {
 		typealias Test = (initial: [Int], insert: [Int], before: Int, expected: [Int])
 
 		let tests: [Test] = [
-			([0, 1], [2, 3], 1, [0, 2, 3, 1]),
-			([0, 1], [2, 3], 0, [2, 3, 0, 1]),
-			([0, 1, 2], [3, 4], 1, [0, 3, 4, 1, 2]),
-			([0, 1, 2], [], 1, [0, 1, 2]),
-			([0], [1], 0, [1, 0])
+			(initial: [0, 1], insert: [2, 3], before: 1, expected: [0, 2, 3, 1]),
+			(initial: [0, 1], insert: [2, 3], before: 0, expected: [2, 3, 0, 1]),
+			(initial: [0, 1, 2], insert: [3, 4], before: 1, expected: [0, 3, 4, 1, 2]),
+			(initial: [0, 1, 2], insert: [], before: 1, expected: [0, 1, 2]),
+			(initial: [0], insert: [1], before: 0, expected: [1, 0])
 		]
-
-		for test in tests {
+		
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
 			snapshot.appendSections([0, 1])
-			snapshot.appendItems(test.initial)
-			snapshot.insertItems(test.insert, beforeItem: test.before)
+			snapshot.appendItems($0.initial)
+			snapshot.insertItems($0.insert, beforeItem: $0.before)
 
-			XCTAssertEqual(snapshot.itemIdentifiers(inSection: 1), test.expected)
+			XCTAssertEqual(snapshot.itemIdentifiers(inSection: 1), $0.expected)
 		}
 	}
 
@@ -208,20 +203,19 @@ final class NSDiffableDataSourceSnapshotTests: XCTestCase {
 		typealias Test = (initial: [Int], insert: [Int], after: Int, expected: [Int])
 
 		let tests: [Test] = [
-			([0, 1], [2, 3], 1, [0, 1, 2, 3]),
-			([0, 1], [2, 3], 0, [0, 2, 3, 1]),
-			([0, 1, 2], [3, 4], 1, [0, 1, 3, 4, 2]),
-			([0, 1, 2], [], 1, [0, 1, 2]),
-			([0], [1], 0, [0, 1])
+			(initial: [0, 1], insert: [2, 3], after: 1, expected: [0, 1, 2, 3]),
+			(initial: [0, 1], insert: [2, 3], after: 0, expected: [0, 2, 3, 1]),
+			(initial: [0, 1, 2], insert: [3, 4], after: 1, expected: [0, 1, 3, 4, 2]),
+			(initial: [0, 1, 2], insert: [], after: 1, expected: [0, 1, 2]),
+			(initial: [0], insert: [1], after: 0, expected: [0, 1])
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
 			snapshot.appendSections([0, 1])
-			snapshot.appendItems(test.initial)
-			snapshot.insertItems(test.insert, afterItem: test.after)
-
-			XCTAssertEqual(snapshot.itemIdentifiers(inSection: 1), test.expected)
+			snapshot.appendItems($0.initial)
+			snapshot.insertItems($0.insert, afterItem: $0.after)
+			XCTAssertEqual(snapshot.itemIdentifiers(inSection: 1), $0.expected)
 		}
 	}
 
@@ -229,25 +223,23 @@ final class NSDiffableDataSourceSnapshotTests: XCTestCase {
 		typealias Test = (initial: [[Int]], delete: [Int], expected: [[Int]])
 
 		let tests: [Test] = [
-			([[], [0, 1]], [0], [[], [1]]),
-			([[0, 1], [2, 3]], [0, 2], [[1], [3]]),
-			([[], []], [100], [[], []]),
-			([[0, 1], [2, 3]], [0, 1], [[], [2, 3]]),
-			([[0, 1], [2, 3]], [0], [[1], [2, 3]]),
-			([[0, 1], [2, 3]], [0, 1, 2, 3], [[], []]),
-			([[0, 1], [2, 3]], [0, 1, 2, 3, 4, 5], [[], []])
+			(initial: [[], [0, 1]], delete: [0], expected: [[], [1]]),
+			(initial: [[0, 1], [2, 3]], delete: [0, 2], expected: [[1], [3]]),
+			(initial: [[], []], delete: [100], expected: [[], []]),
+			(initial: [[0, 1], [2, 3]], delete: [0, 1], expected: [[], [2, 3]]),
+			(initial: [[0, 1], [2, 3]], delete: [0], expected: [[1], [2, 3]]),
+			(initial: [[0, 1], [2, 3]], delete: [0, 1, 2, 3], expected: [[], []]),
+			(initial: [[0, 1], [2, 3]], delete: [0, 1, 2, 3, 4, 5], expected: [[], []])
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-			for (section, items) in test.initial.enumerated() {
+			for (section, items) in $0.initial.enumerated() {
 				snapshot.appendSections([section])
 				snapshot.appendItems(items, toSection: section)
 			}
-
-			snapshot.deleteItems(test.delete)
-
-			for (section, items) in test.expected.enumerated() {
+			snapshot.deleteItems($0.delete)
+			for (section, items) in $0.expected.enumerated() {
 				XCTAssertEqual(snapshot.itemIdentifiers(inSection: section), items)
 			}
 		}
@@ -265,15 +257,13 @@ final class NSDiffableDataSourceSnapshotTests: XCTestCase {
 			([[], [0, 1, 2]])
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-			for (section, items) in test.enumerated() {
+			for (section, items) in $0.enumerated() {
 				snapshot.appendSections([section])
 				snapshot.appendItems(items, toSection: section)
 			}
-
 			snapshot.deleteAllItems()
-
 			XCTAssertEqual(snapshot.itemIdentifiers, [])
 		}
 	}
@@ -282,25 +272,23 @@ final class NSDiffableDataSourceSnapshotTests: XCTestCase {
 		typealias Test = (initial: [[Int]], move: Int, before: Int, expected: [[Int]])
 
 		let tests: [Test] = [
-			([[0, 1], [2, 3]], 0, 2, [[1], [0, 2, 3]]),
-			([[0, 1], [2, 3]], 1, 0, [[1, 0], [2, 3]]),
-			([[0, 1], [2, 3]], 3, 0, [[3, 0, 1], [2]]),
-			([[0, 1], [2, 3]], 2, 3, [[0, 1], [2, 3]]),
-			([[0], [1]], 0, 1, [[], [0, 1]]),
-			([[0], [1]], 1, 0, [[1, 0], []]),
-			([[], [0, 1]], 1, 0, [[], [1, 0]])
+			(initial: [[0, 1], [2, 3]], move: 0, before: 2, expected: [[1], [0, 2, 3]]),
+			(initial: [[0, 1], [2, 3]], move: 1, before: 0, expected: [[1, 0], [2, 3]]),
+			(initial: [[0, 1], [2, 3]], move: 3, before: 0, expected: [[3, 0, 1], [2]]),
+			(initial: [[0, 1], [2, 3]], move: 2, before: 3, expected: [[0, 1], [2, 3]]),
+			(initial: [[0], [1]], move: 0, before: 1, expected: [[], [0, 1]]),
+			(initial: [[0], [1]], move: 1, before: 0, expected: [[1, 0], []]),
+			(initial: [[], [0, 1]], move: 1, before: 0, expected: [[], [1, 0]])
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-			for (section, items) in test.initial.enumerated() {
+			for (section, items) in $0.initial.enumerated() {
 				snapshot.appendSections([section])
 				snapshot.appendItems(items, toSection: section)
 			}
-
-			snapshot.moveItem(test.move, beforeItem: test.before)
-
-			for (section, items) in test.expected.enumerated() {
+			snapshot.moveItem($0.move, beforeItem: $0.before)
+			for (section, items) in $0.expected.enumerated() {
 				XCTAssertEqual(snapshot.itemIdentifiers(inSection: section), items)
 			}
 		}
@@ -310,25 +298,23 @@ final class NSDiffableDataSourceSnapshotTests: XCTestCase {
 		typealias Test = (initial: [[Int]], move: Int, after: Int, expected: [[Int]])
 
 		let tests: [Test] = [
-			([[0, 1], [2, 3]], 0, 2, [[1], [2, 0, 3]]),
-			([[0, 1], [2, 3]], 1, 0, [[0, 1], [2, 3]]),
-			([[0, 1], [2, 3]], 3, 0, [[0, 3, 1], [2]]),
-			([[0, 1], [2, 3]], 2, 3, [[0, 1], [3, 2]]),
-			([[0], [1]], 0, 1, [[], [1, 0]]),
-			([[0], [1]], 1, 0, [[0, 1], []]),
-			([[], [0, 1]], 1, 0, [[], [0, 1]])
+			(initial: [[0, 1], [2, 3]], move: 0, after: 2, expected: [[1], [2, 0, 3]]),
+			(initial: [[0, 1], [2, 3]], move: 1, after: 0, expected: [[0, 1], [2, 3]]),
+			(initial: [[0, 1], [2, 3]], move: 3, after: 0, expected: [[0, 3, 1], [2]]),
+			(initial: [[0, 1], [2, 3]], move: 2, after: 3, expected: [[0, 1], [3, 2]]),
+			(initial: [[0], [1]], move: 0, after: 1, expected: [[], [1, 0]]),
+			(initial: [[0], [1]], move: 1, after: 0, expected: [[0, 1], []]),
+			(initial: [[], [0, 1]], move: 1, after: 0, expected: [[], [0, 1]])
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-			for (section, items) in test.initial.enumerated() {
+			for (section, items) in $0.initial.enumerated() {
 				snapshot.appendSections([section])
 				snapshot.appendItems(items, toSection: section)
 			}
-
-			snapshot.moveItem(test.move, afterItem: test.after)
-
-			for (section, items) in test.expected.enumerated() {
+			snapshot.moveItem($0.move, afterItem: $0.after)
+			for (section, items) in $0.expected.enumerated() {
 				XCTAssertEqual(snapshot.itemIdentifiers(inSection: section), items)
 			}
 		}
@@ -338,15 +324,14 @@ final class NSDiffableDataSourceSnapshotTests: XCTestCase {
 		typealias Test = (initial: [Int], expected: Int)
 
 		let tests: [Test] = [
-			([], 0),
-			([0, 1, 2], 3)
+			(initial: [], expected: 0),
+			(initial: [0, 1, 2], expected: 3)
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-			snapshot.appendSections(test.initial)
-
-			XCTAssertEqual(snapshot.numberOfSections, test.expected)
+			snapshot.appendSections($0.initial)
+			XCTAssertEqual(snapshot.numberOfSections, $0.expected)
 		}
 	}
 
@@ -354,20 +339,19 @@ final class NSDiffableDataSourceSnapshotTests: XCTestCase {
 		typealias Test = (initial: [[Int]], expected: [Int])
 
 		let tests: [Test] = [
-			([[0, 1], [2, 3]], [0, 1, 2, 3]),
-			([[0, 1], []], [0, 1]),
-			([[], [2, 3]], [2, 3]),
-			([[], []], [])
+			(initial: [[0, 1], [2, 3]], expected: [0, 1, 2, 3]),
+			(initial: [[0, 1], []], expected: [0, 1]),
+			(initial: [[], [2, 3]], expected: [2, 3]),
+			(initial: [[], []], expected: [])
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-			for (section, items) in test.initial.enumerated() {
+			for (section, items) in $0.initial.enumerated() {
 				snapshot.appendSections([section])
 				snapshot.appendItems(items, toSection: section)
 			}
-
-			XCTAssertEqual(snapshot.itemIdentifiers, test.expected)
+			XCTAssertEqual(snapshot.itemIdentifiers, $0.expected)
 		}
 	}
 
@@ -375,57 +359,54 @@ final class NSDiffableDataSourceSnapshotTests: XCTestCase {
 		typealias Test = (initial: [Int], expected: [Int])
 
 		let tests: [Test] = [
-			([], []),
-			([0, 1], [0, 1])
+			(initial: [], expected: []),
+			(initial: [0, 1], expected: [0, 1])
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-			snapshot.appendSections(test.initial)
-
-			XCTAssertEqual(snapshot.sectionIdentifiers, test.expected)
+			snapshot.appendSections($0.initial)
+			XCTAssertEqual(snapshot.sectionIdentifiers, $0.expected)
 		}
 	}
 
 	func test_numberOfItemsInSection_snapshotShouldHaveCorrectNumberOfSections() {
-		typealias Test = (initial: [[Int]], expectedInRight: Int)
+		typealias Test = (initial: [[Int]], expected: Int)
 
 		let tests: [Test] = [
-			([[0, 1], [2, 3]], 2),
-			([[0, 1], []], 0),
-			([[], [2, 3]], 2),
-			([[], []], 0)
+			(initial: [[0, 1], [2, 3]], expected: 2),
+			(initial: [[0, 1], []], expected: 0),
+			(initial: [[], [2, 3]], expected: 2),
+			(initial: [[], []], expected: 0)
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-			for (section, items) in test.initial.enumerated() {
+			for (section, items) in $0.initial.enumerated() {
 				snapshot.appendSections([section])
 				snapshot.appendItems(items, toSection: section)
 			}
-
-			XCTAssertEqual(snapshot.numberOfItems(inSection: 1), test.expectedInRight)
+			XCTAssertEqual(snapshot.numberOfItems(inSection: 1), $0.expected)
 		}
 	}
 
 	func test_itemIdentifiersInSection_snapshotShouldHaveCorrectItemIdentifiersInSections() {
-		typealias Test = (initial: [[Int]], expectedInRight: [Int])
+		typealias Test = (initial: [[Int]], expected: [Int])
 
 		let tests: [Test] = [
-			([[0, 1], [2, 3]], [2, 3]),
-			([[0, 1], []], []),
-			([[], [2, 3]], [2, 3]),
-			([[], []], [])
+			(initial: [[0, 1], [2, 3]], expected: [2, 3]),
+			(initial: [[0, 1], []], expected: []),
+			(initial: [[], [2, 3]], expected: [2, 3]),
+			(initial: [[], []], expected: [])
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-			for (section, items) in test.initial.enumerated() {
+			for (section, items) in $0.initial.enumerated() {
 				snapshot.appendSections([section])
 				snapshot.appendItems(items, toSection: section)
 			}
-
-			XCTAssertEqual(snapshot.itemIdentifiers(inSection: 1), test.expectedInRight)
+			XCTAssertEqual(snapshot.itemIdentifiers(inSection: 1), $0.expected)
 		}
 	}
 
@@ -433,21 +414,20 @@ final class NSDiffableDataSourceSnapshotTests: XCTestCase {
 		typealias Test = (initial: [[Int]], item: Int, expected: Int?)
 
 		let tests: [Test] = [
-			([[0, 1], [2, 3]], 2, 1),
-			([[0, 1], []], 0, 0),
-			([[], [2, 3]], 2, 1),
-			([[], []], 0, nil),
-			([[0], [1]], 2, nil)
+			(initial: [[0, 1], [2, 3]], item: 2, expected: 1),
+			(initial: [[0, 1], []], item: 0, expected: 0),
+			(initial: [[], [2, 3]], item: 2, expected: 1),
+			(initial: [[], []], item: 0, expected: nil),
+			(initial: [[0], [1]], item: 2, expected: nil)
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-			for (section, items) in test.initial.enumerated() {
+			for (section, items) in $0.initial.enumerated() {
 				snapshot.appendSections([section])
 				snapshot.appendItems(items, toSection: section)
 			}
-
-			XCTAssertEqual(snapshot.sectionIdentifier(containingItem: test.item), test.expected)
+			XCTAssertEqual(snapshot.sectionIdentifier(containingItem: $0.item), $0.expected)
 		}
 	}
 
@@ -455,58 +435,55 @@ final class NSDiffableDataSourceSnapshotTests: XCTestCase {
 		typealias Test = (initial: [[Int]], item: Int, expected: Int?)
 
 		let tests: [Test] = [
-			([[0, 1], [1, 2]], 2, 1),
-			([[0, 1], [1, 2]], 1, 1)
+			(initial: [[0, 1], [1, 2]], item: 2, expected: 1),
+			(initial: [[0, 1], [1, 2]], item: 1, expected: 1)
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-			for (section, items) in test.initial.enumerated() {
+			for (section, items) in $0.initial.enumerated() {
 				snapshot.appendSections([section])
 				snapshot.appendItems(items, toSection: section)
 			}
-
-			XCTAssertEqual(snapshot.sectionIdentifier(containingItem: test.item), test.expected)
+			XCTAssertEqual(snapshot.sectionIdentifier(containingItem: $0.item), $0.expected)
 		}
 	}
 
 	func test_indexOfItem_snapshotShouldHaveCorrectItemIndex() {
-		typealias Test = (initial: [[Int]], item: Int, expectedIndex: Int?)
+		typealias Test = (initial: [[Int]], item: Int, expected: Int?)
 
 		let tests: [Test] = [
-			([[0, 1], [2, 3]], 2, 2),
-			([[0, 1], []], 0, 0),
-			([[], [2, 3]], 2, 0),
-			([[], []], 0, nil),
-			([[0], [1]], 2, nil)
+			(initial: [[0, 1], [2, 3]], item: 2, expected: 2),
+			(initial: [[0, 1], []], item: 0, expected: 0),
+			(initial: [[], [2, 3]], item: 2, expected: 0),
+			(initial: [[], []], item: 0, expected: nil),
+			(initial: [[0], [1]], item: 2, expected: nil)
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-			for (section, items) in test.initial.enumerated() {
+			for (section, items) in $0.initial.enumerated() {
 				snapshot.appendSections([section])
 				snapshot.appendItems(items, toSection: section)
 			}
-
-			XCTAssertEqual(snapshot.indexOfItem(test.item), test.expectedIndex)
+			XCTAssertEqual(snapshot.indexOfItem($0.item), $0.expected)
 		}
 	}
 
 	func test_indexOfSection_snapshotShouldHaveCorrectSectionIndex() {
-		typealias Test = (initial: [Int], section: Int, expectedIndex: Int?)
+		typealias Test = (initial: [Int], section: Int, expected: Int?)
 
 		let tests: [Test] = [
-			([0, 1, 2], 1, 1),
-			([0, 1, 2], 2, 2),
-			([0, 1, 2], 3, nil),
-			([], 0, nil)
+			(initial: [0, 1, 2], section: 1, expected: 1),
+			(initial: [0, 1, 2], section: 2, expected: 2),
+			(initial: [0, 1, 2], section: 3, expected: nil),
+			(initial: [], section: 0, expected: nil)
 		]
 
-		for test in tests {
+		tests.forEach {
 			var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
-			snapshot.appendSections(test.initial)
-
-			XCTAssertEqual(snapshot.indexOfSection(test.section), test.expectedIndex)
+			snapshot.appendSections($0.initial)
+			XCTAssertEqual(snapshot.indexOfSection($0.section), $0.expected)
 		}
 	}
 }

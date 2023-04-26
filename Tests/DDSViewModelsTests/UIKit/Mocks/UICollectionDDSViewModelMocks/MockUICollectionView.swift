@@ -4,7 +4,8 @@ import UIKit
 @testable import DDSViewModels
 
 final class MockUICollectionView: UICollectionView {
-	var isPerformBatchUpdatesCalledCount = 0
+	
+	var performBatchUpdatesCalledCount = 0
 	
 	init() {
 		super.init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -19,7 +20,7 @@ final class MockUICollectionView: UICollectionView {
 	}
 	
 	override func performBatchUpdates(_ updates: (() -> Void)?, completion: ((Bool) -> Void)? = nil) {
-		isPerformBatchUpdatesCalledCount += 1
+		performBatchUpdatesCalledCount += 1
 		updates?()
 		completion?(true)
 	}

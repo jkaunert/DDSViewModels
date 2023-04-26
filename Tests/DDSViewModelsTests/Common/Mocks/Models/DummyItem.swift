@@ -1,13 +1,10 @@
-import Foundation
-@testable import DDSViewModels
 import XCTest
+@testable import DDSViewModels
 
-public struct MockItem: Hashable {
-	
+public struct DummyItem: Hashable {
 	let text: String
-	
 	private let creationDate: Date
-	
+
 	public init(text: String) {
 		self.text = text
 		self.creationDate = Date()
