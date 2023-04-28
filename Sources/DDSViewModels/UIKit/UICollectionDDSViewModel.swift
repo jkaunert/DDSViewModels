@@ -53,7 +53,7 @@ private extension UICollectionDDSViewModel {
 	}
 	
 	private func update(for section: Section) {
-		var snapshot = NSDiffableDataSourceSnapshot<SectionType.Section, ItemType>()
+		var snapshot = NSDiffableDataSourceSnapshot<Section, ItemType>()
 		snapshot.appendSections(SectionType.allSections)
 		snapshot.appendItems(items)
 		diffableDataSource?.apply(snapshot)

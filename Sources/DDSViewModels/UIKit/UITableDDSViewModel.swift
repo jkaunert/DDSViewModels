@@ -52,7 +52,7 @@ private extension UITableDDSViewModel {
 	}
 	
 	private func update(for section: Section) {
-		var snapshot = NSDiffableDataSourceSnapshot<SectionType.Section, ItemType>.init()
+		var snapshot = NSDiffableDataSourceSnapshot<Section, ItemType>.init()
 		snapshot.appendSections(SectionType.allSections)
 		snapshot.appendItems(items)
 		diffableDataSource?.apply(snapshot)
