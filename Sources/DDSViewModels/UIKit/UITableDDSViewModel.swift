@@ -1,14 +1,17 @@
 #if os(iOS) || os(tvOS)
 import UIKit
 
-open class UITableDDSViewModel<SectionType: Hashable, CellType: UITableViewCell & Providing>: NSObject {
+open class UITableDDSViewModel<SectionType: DDSSection, CellType: UITableViewCell & Providing>: NSObject {
 	
-	public typealias Item = CellType.Provided
-	public typealias Section = SectionType
-	public typealias DiffableTableViewDataSource = UITableViewDiffableDataSource<Section, Item>
-	public weak var tableView: UITableView?
-	@Published public var items: [Item] = .init([])
+	public typealias ItemType = CellType.Provided
+//	public typealias Section = SectionType
+	public typealias DiffableTableViewDataSource = UITableViewDiffableDataSource<SectionType, ItemType>
+	@Published public var items: [ItemType] = .init([])
+	
 	var diffableDataSource: DiffableTableViewDataSource?
+	
+	private weak var tableView: UITableView?
+	
 	private var cellIdentifier: String
 	
 	public init(tableView: UITableView,  cellReuseIdentifier: String) {
@@ -20,13 +23,13 @@ open class UITableDDSViewModel<SectionType: Hashable, CellType: UITableViewCell 
 
 public extension UITableDDSViewModel {
 	
-	func add(_ items: [Item], to section: Section, completion: (() -> Void)? = nil) {
+	func add(_ items: [ItemType], to section: SectionType, completion: (() -> Void)? = nil) {
 		self.items.append(contentsOf: items)
 		update(for: section)
 		completion?()
 	}
 	
-	func remove(_ items: [Item], from section: Section, completion: (() -> Void)? = nil) {
+	func remove(_ items: [ItemType], from section: SectionType, completion: (() -> Void)? = nil) {
 		self.items.removeAll { items.contains($0) }
 		update(for: section)
 		completion?()
@@ -42,14 +45,14 @@ public extension UITableDDSViewModel {
 
 private extension UITableDDSViewModel {
 	
-	private func cellProvider(_ tableView: UITableView, indexPath: IndexPath, item: Item) -> UITableViewCell? {
+	private func cellProvider(_ tableView: UITableView, indexPath: IndexPath, item: ItemType) -> UITableViewCell? {
 		let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! CellType
 		cell.provide(item)
 		return cell
 	}
 	
-	private func update(for section: Section) {
-		var snapshot = NSDiffableDataSourceSnapshot<Section, Item>.init()
+	private func update(for section: SectionType) {
+		var snapshot = NSDiffableDataSourceSnapshot<SectionType, ItemType>.init()
 		snapshot.appendSections([section])
 		snapshot.appendItems(items)
 		diffableDataSource?.apply(snapshot)

@@ -1,14 +1,18 @@
 #if os(iOS) || os(tvOS)
 import UIKit
 
-open class UICollectionDDSViewModel<SectionType: Hashable, CellType: UICollectionViewCell & Providing>: NSObject {
+open class UICollectionDDSViewModel<SectionType: DDSSection, CellType: UICollectionViewCell & Providing>: NSObject {
 	
-	public typealias Section = SectionType
-	public typealias Item = CellType.Provided
-	public typealias DiffableDataSource = UICollectionViewDiffableDataSource<Section, Item>
-	public weak var collectionView: UICollectionView?
-	@Published public var items: [Item] = .init([])
+//	public typealias Section = SectionType
+	public typealias ItemType = CellType.Provided
+	public typealias DiffableDataSource = UICollectionViewDiffableDataSource<SectionType, ItemType>
+	
+	@Published public var items: [ItemType] = .init([])
+	
+	private weak var collectionView: UICollectionView?
+	
 	var diffableDataSource: DiffableDataSource?
+	
 	private var cellIdentifier: String
 	
 	public init(collectionView: UICollectionView,  cellReuseIdentifier: String) {
@@ -27,13 +31,13 @@ public extension UICollectionDDSViewModel {
 		return diffableDataSource
 	}
 	
-	func add(_ items: [Item], to section: Section, completion: (() -> Void)? = nil) {
+	func add(_ items: [ItemType], to section: SectionType, completion: (() -> Void)? = nil) {
 		self.items.append(contentsOf: items)
 		update(for: section)
 		completion?()
 	}
 	
-	func remove(_ items: [Item], from section: Section, completion: (() -> Void)? = nil) {
+	func remove(_ items: [ItemType], from section: SectionType, completion: (() -> Void)? = nil) {
 		self.items.removeAll { items.contains($0) }
 		update(for: section)
 		completion?()
@@ -42,14 +46,14 @@ public extension UICollectionDDSViewModel {
 
 private extension UICollectionDDSViewModel {
 	
-	private func cellProvider(_ collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell? {
+	private func cellProvider(_ collectionView: UICollectionView, indexPath: IndexPath, item: ItemType) -> UICollectionViewCell? {
 		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! CellType
 		cell.provide(item)
 		return cell
 	}
 	
-	private func update(for section: Section) {
-		var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+	private func update(for section: SectionType) {
+		var snapshot = NSDiffableDataSourceSnapshot<SectionType, ItemType>()
 		snapshot.appendSections([section])
 		snapshot.appendItems(items)
 		diffableDataSource?.apply(snapshot)
