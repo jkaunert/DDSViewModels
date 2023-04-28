@@ -8,5 +8,4 @@ final class StubUITableViewModel: UITableDDSViewModel<DummySection, FakeUITableV
 	}
 }
 
-extension StubUITableViewModel: UITableViewDelegate {}
 #endif

@@ -1,7 +1,7 @@
 #if os(iOS) || os(tvOS)
 import UIKit
 
-open class UICollectionDDSViewModel<SectionType: DDSSection, CellType: UICollectionViewCell & Providing>: NSObject {
+open class UICollectionDDSViewModel<SectionType: DDSSection, CellType: UICollectionViewCell & Providing>: NSObject, UICollectionViewDelegate {
 	
 	public typealias ItemType = CellType.Provided
 	public typealias DiffableDataSource = UICollectionViewDiffableDataSource<SectionType, ItemType>
@@ -10,7 +10,7 @@ open class UICollectionDDSViewModel<SectionType: DDSSection, CellType: UICollect
 	
 	private weak var collectionView: UICollectionView?
 	
-	var diffableDataSource: DiffableDataSource?
+	public private(set) var diffableDataSource: DiffableDataSource?
 	
 	private var cellIdentifier: String
 	

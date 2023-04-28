@@ -10,6 +10,4 @@ final class StubUICollectionViewModel: UICollectionDDSViewModel<DummySection, Fa
 		super.init(collectionView: collectionView, cellReuseIdentifier: "FakeUICollectionViewCell")
 	}
 }
-
-extension StubUICollectionViewModel: UICollectionViewDelegate {}
 #endif
