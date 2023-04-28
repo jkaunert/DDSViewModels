@@ -1,11 +1,11 @@
 #if os(iOS) || os(tvOS)
 import UIKit
 
-open class UITableDDSViewModel<SectionType: DDSSection, CellType: UITableViewCell & Providing>: NSObject {
+open class UITableDDSViewModel<SectionType: Hashable, CellType: UITableViewCell & Providing>: NSObject {
 	
-	public typealias Section = SectionType.Section
+	public typealias Section = SectionType
 	public typealias ItemType = CellType.Provided
-	public typealias DiffableTableViewDataSource = UITableViewDiffableDataSource<SectionType.Section, ItemType>
+	public typealias DiffableTableViewDataSource = UITableViewDiffableDataSource<Section, ItemType>
 	@Published public var items: [ItemType] = .init([])
 	
 	private weak var tableView: UITableView?
@@ -53,7 +53,7 @@ private extension UITableDDSViewModel {
 	
 	private func update(for section: Section) {
 		var snapshot = NSDiffableDataSourceSnapshot<Section, ItemType>.init()
-		snapshot.appendSections(SectionType.allSections)
+		snapshot.appendSections([section])
 		snapshot.appendItems(items)
 		diffableDataSource?.apply(snapshot)
 	}

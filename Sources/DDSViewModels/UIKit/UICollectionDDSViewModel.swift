@@ -3,9 +3,8 @@ import UIKit
 
 open class UICollectionDDSViewModel<SectionType: DDSSection, CellType: UICollectionViewCell & Providing>: NSObject {
 	
-	public typealias Section = SectionType.Section
 	public typealias ItemType = CellType.Provided
-	public typealias DiffableDataSource = UICollectionViewDiffableDataSource<SectionType.Section, ItemType>
+	public typealias DiffableDataSource = UICollectionViewDiffableDataSource<SectionType, ItemType>
 	
 	@Published public var items: [ItemType] = .init([])
 	
@@ -31,13 +30,13 @@ public extension UICollectionDDSViewModel {
 		return diffableDataSource
 	}
 	
-	func add(_ items: [ItemType], to section: Section, completion: (() -> Void)? = nil) {
+	func add(_ items: [ItemType], to section: SectionType, completion: (() -> Void)? = nil) {
 		self.items.append(contentsOf: items)
 		update(for: section)
 		completion?()
 	}
 	
-	func remove(_ items: [ItemType], from section: Section, completion: (() -> Void)? = nil) {
+	func remove(_ items: [ItemType], from section: SectionType, completion: (() -> Void)? = nil) {
 		self.items.removeAll { items.contains($0) }
 		update(for: section)
 		completion?()
@@ -52,9 +51,9 @@ private extension UICollectionDDSViewModel {
 		return cell
 	}
 	
-	private func update(for section: Section) {
-		var snapshot = NSDiffableDataSourceSnapshot<Section, ItemType>()
-		snapshot.appendSections(SectionType.allSections)
+	private func update(for section: SectionType) {
+		var snapshot = NSDiffableDataSourceSnapshot<SectionType, ItemType>()
+		snapshot.appendSections([section])
 		snapshot.appendItems(items)
 		diffableDataSource?.apply(snapshot)
 	}
