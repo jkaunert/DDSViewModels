@@ -3,7 +3,7 @@ import UIKit
 
 public typealias Section = DiffableSection
 
-public class DiffableTableViewDataSource<SectionType: Section, CellType: UITableViewCell & Providing>: UITableViewDiffableDataSource<SectionType, CellType.Provided>, UITableViewDelegate {
+public class DiffableTableViewDataSource<SectionType: Section, CellType: UITableViewCell & Providing>: UITableViewDiffableDataSource<SectionType, CellType.Provided> {
 	
 	// MARK: header/footer titles support
 	public override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -65,6 +65,7 @@ public class DiffableTableViewDataSource<SectionType: Section, CellType: UITable
 	}
 	
 	public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		print("cell tapped")
 		return CellType()
 	}
 }
