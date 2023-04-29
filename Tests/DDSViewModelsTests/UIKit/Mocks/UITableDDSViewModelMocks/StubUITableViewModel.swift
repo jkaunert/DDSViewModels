@@ -8,4 +8,10 @@ final class StubUITableViewModel: UITableDDSViewModel<DummySection, FakeUITableV
 	}
 }
 
+extension DiffableTableViewDataSource<DummySection, FakeUITableViewCell> {
+	public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		print("selected row: \(indexPath.row)")
+	}
+}
+
 #endif
