@@ -64,9 +64,9 @@ public class DiffableTableViewDataSource<SectionType: Section, CellType: UITable
 		}
 	}
 	
-	public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		print("cell tapped")
-		return CellType()
-	}
+//	public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//		print("cell tapped")
+//		return CellType()
+//	}
 }
 #endif

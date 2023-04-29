@@ -1,7 +1,7 @@
 #if os(iOS) || os(tvOS)
 import UIKit
 
-open class UITableDDSViewModel<SectionType: Section, CellType: UITableViewCell & Providing>: NSObject, UITableViewDelegate {
+open class UITableDDSViewModel<SectionType: Section, CellType: UITableViewCell & Providing>: NSObject {
 	
 	public typealias Section = SectionType
 	public typealias Item = CellType.Provided
