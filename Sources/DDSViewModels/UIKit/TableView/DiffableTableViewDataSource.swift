@@ -21,14 +21,16 @@ public class DiffableTableViewDataSource<SectionType: Section, CellType: UITable
 	}
 	
 	public override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+		var snapshot = snapshot()
 		guard let sourceIdentifier = itemIdentifier(for: sourceIndexPath) else { return }
 		guard sourceIndexPath != destinationIndexPath else { return }
-		let destinationIdentifier = itemIdentifier(for: destinationIndexPath)
-		
-		var snapshot = snapshot()
-		self.apply(snapshot, animatingDifferences: true)
-		
-		if let destinationIdentifier = destinationIdentifier {
+		guard let destinationIdentifier = itemIdentifier(for: destinationIndexPath) else {
+			let destinationSectionIdentifier = snapshot.sectionIdentifiers[destinationIndexPath.section]
+			snapshot.deleteItems([sourceIdentifier])
+			snapshot.appendItems([sourceIdentifier], toSection: destinationSectionIdentifier)
+			self.apply(snapshot, animatingDifferences: false)
+			return
+		}
 			if let sourceIndex = snapshot.indexOfItem(sourceIdentifier),
 			   let destinationIndex = snapshot.indexOfItem(destinationIdentifier) {
 				let isAfter = destinationIndex > sourceIndex &&
@@ -41,14 +43,8 @@ public class DiffableTableViewDataSource<SectionType: Section, CellType: UITable
 				else {
 					snapshot.insertItems([sourceIdentifier], beforeItem: destinationIdentifier)
 				}
+				self.apply(snapshot, animatingDifferences: false)
 			}
-		}
-		else {
-			let destinationSectionIdentifier = snapshot.sectionIdentifiers[destinationIndexPath.section]
-			snapshot.deleteItems([sourceIdentifier])
-			snapshot.appendItems([sourceIdentifier], toSection: destinationSectionIdentifier)
-		}
-		self.apply(snapshot, animatingDifferences: false)
 	}
 
 	public override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
