@@ -8,12 +8,12 @@ public class DiffableTableViewDataSource<SectionType: Section, CellType: UITable
 	typealias Section = SectionType
 
 	public override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-		let sectionKind = SectionType.allSections[section] as? SectionType
-		return sectionKind?.title
+		let sectionKind = Section.allSections[section]
+		return sectionKind.title
 	}
 	public override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-		let sectionKind = SectionType.allSections[section] as? SectionType
-		return sectionKind?.id.uuidString
+		let sectionKind = Section.allSections[section]
+		return sectionKind.id.uuidString
 	}
 	
 	public override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {

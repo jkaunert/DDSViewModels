@@ -3,8 +3,10 @@ import UIKit
 
 public class DiffableCollectionViewDataSource<SectionType: Section, CellType: UICollectionViewCell & Providing>: UICollectionViewDiffableDataSource<SectionType, CellType.Provided> {
 	
+	public typealias Section = SectionType
 	public override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-		let sectionKind = SectionType.allSections[indexPath.section] as? SectionType
+		let sectionKind = String(describing: Section.allSections[indexPath.section].self)
+		print(sectionKind)
 		return UICollectionReusableView(frame: .zero)
 	}
 

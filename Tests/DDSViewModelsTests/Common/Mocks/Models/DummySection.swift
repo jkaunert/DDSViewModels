@@ -2,6 +2,8 @@ import XCTest
 @testable import DDSViewModels
 
 public struct DummySection: DiffableSection {
+	public typealias Section = Self
+	
 	public var id = UUID()
 	public var title: String
 

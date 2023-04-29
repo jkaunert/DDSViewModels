@@ -50,8 +50,10 @@ public extension UITableDDSViewModel {
 	}
 	
 	private func update(for section: Section, with items: [Item]) {
-		var snapshot = NSDiffableDataSourceSnapshot<Section, CellType.Provided>.init()
-		snapshot.appendSections([section])
+		var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+		let sections = Section.allSections
+		print(sections)
+		snapshot.appendSections(sections)
 		snapshot.appendItems(items, toSection: section)
 		diffableDataSource?.apply(snapshot)
 	}
@@ -66,13 +68,13 @@ extension UITableDDSViewModel {
 	}
 
 	func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-		let sectionKind = SectionType.allSections[section] as? SectionType
-		return sectionKind?.title
+		let sectionKind = Section.allSections[section]
+		return sectionKind.title
 	}
 	
 	func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-		let sectionKind = SectionType.allSections[section] as? SectionType
-		return sectionKind?.id.uuidString
+		let sectionKind = Section.allSections[section]
+		return sectionKind.id.uuidString
 	}
 	
 
