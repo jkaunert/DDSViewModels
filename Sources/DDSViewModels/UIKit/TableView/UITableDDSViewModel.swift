@@ -25,21 +25,22 @@ public extension UITableDDSViewModel {
 	
 	func add(_ items: [Item], to section: Section, completion: (() -> Void)? = nil) {
 		self.items.append(contentsOf: items)
-		update(for: section, with: self.items)
+		update(for: section)
 		completion?()
 	}
 	
 	func remove(_ items: [Item], from section: Section, completion: (() -> Void)? = nil) {
 		self.items.removeAll { items.contains($0) }
-		update(for: section, with: self.items)
+		update(for: section)
 		completion?()
 	}
 	
 	func move(_ items: [Item], from fromSection: Section, to toSection: Section) {
+		remove(items, from: fromSection)
+		update(for: fromSection)
 		
-		update(for: toSection, with: items)
-		update(for: fromSection, with: [])
-		
+		add(items, to: toSection)
+		update(for: toSection)
 	}
 	
 	func makeDiffableDataSource() -> DiffableTableViewDataSource<Section, CellType> {
@@ -49,7 +50,7 @@ public extension UITableDDSViewModel {
 		return diffableDataSource
 	}
 	
-	private func update(for section: Section, with items: [Item]) {
+	private func update(for section: Section) {
 		var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
 		let sections = Section.allSections
 		print(sections)
