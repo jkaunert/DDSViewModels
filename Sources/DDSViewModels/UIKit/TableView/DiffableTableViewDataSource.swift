@@ -5,7 +5,8 @@ public typealias Section = DiffableSection
 
 public class DiffableTableViewDataSource<SectionType: Section, CellType: UITableViewCell & Providing>: UITableViewDiffableDataSource<SectionType, CellType.Provided> {
 	
-	// MARK: header/footer titles support
+	typealias Section = SectionType
+
 	public override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
 		let sectionKind = SectionType.allSections[section] as? SectionType
 		return sectionKind?.title
@@ -15,7 +16,6 @@ public class DiffableTableViewDataSource<SectionType: Section, CellType: UITable
 		return sectionKind?.id.uuidString
 	}
 	
-	// MARK: reordering support
 	public override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
 		return true
 	}
@@ -25,7 +25,8 @@ public class DiffableTableViewDataSource<SectionType: Section, CellType: UITable
 		guard sourceIndexPath != destinationIndexPath else { return }
 		let destinationIdentifier = itemIdentifier(for: destinationIndexPath)
 		
-		var snapshot = self.snapshot()
+		var snapshot = snapshot()
+		self.apply(snapshot, animatingDifferences: true)
 		
 		if let destinationIdentifier = destinationIdentifier {
 			if let sourceIndex = snapshot.indexOfItem(sourceIdentifier),
@@ -36,20 +37,20 @@ public class DiffableTableViewDataSource<SectionType: Section, CellType: UITable
 				snapshot.deleteItems([sourceIdentifier])
 				if isAfter {
 					snapshot.insertItems([sourceIdentifier], afterItem: destinationIdentifier)
-				} else {
+				}
+				else {
 					snapshot.insertItems([sourceIdentifier], beforeItem: destinationIdentifier)
 				}
 			}
-		} else {
+		}
+		else {
 			let destinationSectionIdentifier = snapshot.sectionIdentifiers[destinationIndexPath.section]
 			snapshot.deleteItems([sourceIdentifier])
 			snapshot.appendItems([sourceIdentifier], toSection: destinationSectionIdentifier)
 		}
-		apply(snapshot, animatingDifferences: false)
+		self.apply(snapshot, animatingDifferences: false)
 	}
-	
-	// MARK: editing support
-	
+
 	public override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
 		return true
 	}
@@ -63,10 +64,5 @@ public class DiffableTableViewDataSource<SectionType: Section, CellType: UITable
 			}
 		}
 	}
-	
-//	public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//		print("cell tapped")
-//		return CellType()
-//	}
 }
 #endif

@@ -386,7 +386,7 @@ final class UITableDDSViewModelTests: XCTestCase {
 		XCTAssertNotNil(moveCell, "precondition")
 		XCTAssertEqual(dataSource.tableView(tableVC.tableView, numberOfRowsInSection: 0), 0)
 		XCTAssertEqual(dataSource.tableView(tableVC.tableView, numberOfRowsInSection: 1), 1)
-//		XCTAssertEqual(dataSourceCell.textLabel?.text, moveCell.textLabel?.text)
+		XCTAssertEqual(dataSourceCell.textLabel?.text, moveCell.textLabel?.text)
 		
 	}
 }
