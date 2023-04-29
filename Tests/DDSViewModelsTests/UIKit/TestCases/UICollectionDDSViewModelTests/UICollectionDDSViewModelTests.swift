@@ -362,7 +362,7 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		dataSource.apply(snapshot)
 		XCTAssertEqual(
 			dataSource.collectionView(collectionVC.collectionView, canMoveItemAt: IndexPath(item: 1, section: 0)),
-			false
+			true
 		)
 	}
 }

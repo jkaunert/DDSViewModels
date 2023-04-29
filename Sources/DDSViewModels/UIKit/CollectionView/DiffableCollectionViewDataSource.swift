@@ -3,13 +3,11 @@ import UIKit
 
 public class DiffableCollectionViewDataSource<SectionType: Section, CellType: UICollectionViewCell & Providing>: UICollectionViewDiffableDataSource<SectionType, CellType.Provided> {
 	
-	// MARK: header/footer titles support
 	public override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
 		let sectionKind = SectionType.allSections[indexPath.section] as? SectionType
 		return UICollectionReusableView(frame: .zero)
 	}
 
-	// MARK: reordering support
 	public override func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
 		return true
 	}
@@ -30,11 +28,13 @@ public class DiffableCollectionViewDataSource<SectionType: Section, CellType: UI
 				snapshot.deleteItems([sourceIdentifier])
 				if isAfter {
 					snapshot.insertItems([sourceIdentifier], afterItem: destinationIdentifier)
-				} else {
+				}
+				else {
 					snapshot.insertItems([sourceIdentifier], beforeItem: destinationIdentifier)
 				}
 			}
-		} else {
+		}
+		else {
 			let destinationSectionIdentifier = snapshot.sectionIdentifiers[destinationIndexPath.section]
 			snapshot.deleteItems([sourceIdentifier])
 			snapshot.appendItems([sourceIdentifier], toSection: destinationSectionIdentifier)

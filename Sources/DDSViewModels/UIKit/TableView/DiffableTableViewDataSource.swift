@@ -63,5 +63,9 @@ public class DiffableTableViewDataSource<SectionType: Section, CellType: UITable
 			}
 		}
 	}
+	
+//	public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//		return UITableViewCell()
+//	}
 }
 #endif
