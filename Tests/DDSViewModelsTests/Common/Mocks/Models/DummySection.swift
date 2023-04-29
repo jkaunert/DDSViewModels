@@ -1,7 +1,7 @@
 import XCTest
 @testable import DDSViewModels
 
-public struct DummySection: DDSSection {
+public struct DummySection: DiffableSection {
 	public var id = UUID()
 	public var title: String
 
