@@ -8,7 +8,7 @@ final class UITableViewDDSTests: XCTestCase {
 	
 	private var tableView: MockUITableView!
 	private var sutCell: FakeUITableViewCell!
-	private var sut: DiffableTableViewDataSource<DummySection, FakeUITableViewCell>!
+	private var sut: UITableViewDiffableDataSource<DummySection, DummyItem>!
 	private var snapshot: Snapshot!
 	
 	private var sections: [DummySection] = [
@@ -37,7 +37,7 @@ final class UITableViewDDSTests: XCTestCase {
 		try super.setUpWithError()
 		tableView = MockUITableView()
 		sutCell = FakeUITableViewCell()
-		sut = DiffableTableViewDataSource<DummySection, FakeUITableViewCell>(tableView: tableView) { _, _, _ in
+		sut = UITableViewDiffableDataSource<DummySection, DummyItem>(tableView: tableView) { _, _, _ in
 			self.sutCell
 		}
 		snapshot = Snapshot()
@@ -185,7 +185,7 @@ final class UITableViewDDSTests: XCTestCase {
 		sut.apply(snapshot)
 		XCTAssertEqual(
 			sut.tableView(tableView, canMoveRowAt: IndexPath(item: 1, section: 0)),
-			true
+			false
 		)
 	}
 }

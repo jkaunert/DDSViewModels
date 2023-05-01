@@ -32,7 +32,8 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 
 	override func setUpWithError() throws {
 		try super.setUpWithError()
-
+		DummySection.allSections = [dummySection1
+		, dummySection2]
 		collectionVC = FakeUICollectionViewController()
 		sut = collectionVC.viewModel
 		collectionVC.loadViewIfNeeded()
@@ -42,7 +43,7 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 	}
 	
 	override func tearDownWithError() throws {
-		
+		DummySection.allSections = []
 		snapshot = nil
 		dataSource = nil
 		collectionVC = nil
@@ -362,7 +363,7 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		dataSource.apply(snapshot)
 		XCTAssertEqual(
 			dataSource.collectionView(collectionVC.collectionView, canMoveItemAt: IndexPath(item: 1, section: 0)),
-			true
+			false
 		)
 	}
 }

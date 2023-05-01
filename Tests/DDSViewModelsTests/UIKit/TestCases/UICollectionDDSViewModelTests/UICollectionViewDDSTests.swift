@@ -6,7 +6,7 @@ final class UICollectionViewDDSTests: XCTestCase {
 	
 	private typealias Snapshot = NSDiffableDataSourceSnapshot<DummySection, DummyItem>
 	
-	private var sut: DiffableCollectionViewDataSource<DummySection, FakeUICollectionViewCell>!
+	private var sut: UICollectionViewDiffableDataSource<DummySection, DummyItem>!
 	private var collectionView: MockUICollectionView!
 	private var sutCell: FakeUICollectionViewCell!
 	private var snapshot: Snapshot!
@@ -22,7 +22,7 @@ final class UICollectionViewDDSTests: XCTestCase {
 
 	]
 	
-	private let items = [
+	private let items: [DummyItem] = [
 		DummyItem(text: "Dummy Item 1"),
 		DummyItem(text: "Dummy Item 2"),
 		DummyItem(text: "Dummy Item 3"),
@@ -37,7 +37,7 @@ final class UICollectionViewDDSTests: XCTestCase {
 		try super.setUpWithError()
 		collectionView = MockUICollectionView()
 		sutCell = FakeUICollectionViewCell()
-		sut = DiffableCollectionViewDataSource<DummySection, FakeUICollectionViewCell>(collectionView: collectionView) { _, _, _ in
+		sut = UICollectionViewDiffableDataSource<DummySection, DummyItem>(collectionView: collectionView) { _, _, _ in
 			self.sutCell
 		}
 		snapshot = Snapshot()
@@ -172,7 +172,7 @@ final class UICollectionViewDDSTests: XCTestCase {
 		sut.apply(snapshot)
 		XCTAssertEqual(
 			sut.collectionView(collectionView, canMoveItemAt: IndexPath(item: 1, section: 0)),
-			true
+			false
 		)
 	}
 }

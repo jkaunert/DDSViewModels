@@ -9,7 +9,7 @@ open class UICollectionDDSViewModel<SectionType: Section, CellType: UICollection
 	
 	private weak var collectionView: UICollectionView?
 	
-	public private(set) var diffableDataSource: DiffableCollectionViewDataSource<Section, CellType>?
+	public private(set) var diffableDataSource: UICollectionViewDiffableDataSource<Section, Item>?
 	
 	private var cellIdentifier: String
 	
@@ -22,9 +22,9 @@ open class UICollectionDDSViewModel<SectionType: Section, CellType: UICollection
 
 public extension UICollectionDDSViewModel {
 	
-	func makeDiffableDataSource() -> DiffableCollectionViewDataSource<Section, CellType> {
+	func makeDiffableDataSource() -> UICollectionViewDiffableDataSource<Section, Item> {
 		guard let collectionView else { fatalError("CollectionView should exist but doesn't") }
-		let diffableDataSource = DiffableCollectionViewDataSource<Section, CellType>(collectionView: collectionView, cellProvider: cellProvider)
+		let diffableDataSource = UICollectionViewDiffableDataSource<Section, Item>(collectionView: collectionView, cellProvider: cellProvider)
 		self.diffableDataSource = diffableDataSource
 		return diffableDataSource
 	}

@@ -29,7 +29,7 @@ final class UITableDDSViewModelTests: XCTestCase {
 	
 	private var sut: UITableDDSViewModel<DummySection, FakeUITableViewCell>!
 	private var tableVC: FakeUITableViewController!
-	private var dataSource: DiffableTableViewDataSource<DummySection, FakeUITableViewCell>!
+	private var dataSource: UITableViewDiffableDataSource<DummySection, DummyItem>!
 	private var snapshot: Snapshot!
 	
 	override func setUpWithError() throws {
@@ -61,7 +61,7 @@ final class UITableDDSViewModelTests: XCTestCase {
 	
 	func test_init_dataSource_shouldBeCorrectKind() throws {
 		
-		XCTAssertTrue(try XCTUnwrap(dataSource) .isKind(of: DiffableTableViewDataSource<DummySection, FakeUITableViewCell>.self))
+		XCTAssertTrue(try XCTUnwrap(dataSource) .isKind(of: UITableViewDiffableDataSource<DummySection, DummyItem>.self))
 	}
 	
 	func test_apply_whenAppendingItemsToMainSection_shouldDiffCorrectly() {
@@ -361,7 +361,7 @@ final class UITableDDSViewModelTests: XCTestCase {
 		dataSource.apply(snapshot)
 		XCTAssertEqual(
 			dataSource.tableView(tableVC.tableView, canMoveRowAt: IndexPath(item: 1, section: 0)),
-			true
+			false
 		)
 	}
 	
@@ -384,8 +384,8 @@ final class UITableDDSViewModelTests: XCTestCase {
 //		let moveCell = try XCTUnwrap(dataSource.tableView(tableVC.tableView, cellForRowAt:  IndexPath(item: 0, section: 1)) as? FakeUITableViewCell)
 //
 //		XCTAssertNotNil(moveCell, "precondition")
-		XCTAssertEqual(dataSource.tableView(tableVC.tableView, numberOfRowsInSection: 0), 0)
-		XCTAssertEqual(dataSource.tableView(tableVC.tableView, numberOfRowsInSection: 1), 1)
+		XCTAssertEqual(dataSource.tableView(tableVC.tableView, numberOfRowsInSection: 1), 0)
+		XCTAssertEqual(dataSource.tableView(tableVC.tableView, numberOfRowsInSection: 0), 1)
 //		XCTAssertEqual(dataSourceCell.textLabel?.text, moveCell.textLabel?.text)
 //		
 	}

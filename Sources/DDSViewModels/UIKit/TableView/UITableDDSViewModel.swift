@@ -10,7 +10,7 @@ open class UITableDDSViewModel<SectionType: Section, CellType: UITableViewCell &
 	
 	private weak var tableView: UITableView?
 	
-	public private(set) var diffableDataSource: DiffableTableViewDataSource<Section, CellType>?
+	public private(set) var diffableDataSource: UITableViewDiffableDataSource<Section, Item>?
 	
 	private var cellIdentifier: String
 	
@@ -25,24 +25,24 @@ public extension UITableDDSViewModel {
 	
 	func add(_ items: [Item], to section: Section, completion: (() -> Void)? = nil) {
 		self.items.append(contentsOf: items)
-		update(section: section, with: items)
+		update(section: section)
 		completion?()
 	}
 	
 	func remove(_ items: [Item], from section: Section, completion: (() -> Void)? = nil) {
 		self.items.removeAll { items.contains($0) }
-		update(section: section, with: items)
+		update(section: section)
 		completion?()
 	}
 	
-	func makeDiffableDataSource() -> DiffableTableViewDataSource<Section, CellType> {
+	func makeDiffableDataSource() -> UITableViewDiffableDataSource<Section, Item> {
 		guard let tableView else { fatalError("TableView should exist but doesn't") }
-		let diffableDataSource = DiffableTableViewDataSource<Section, CellType>(tableView: tableView, cellProvider: cellProvider)
+		let diffableDataSource = UITableViewDiffableDataSource<Section, Item>(tableView: tableView, cellProvider: cellProvider)
 		self.diffableDataSource = diffableDataSource
 		return diffableDataSource
 	}
 	
-	private func update(section: Section, with items: [Item]) {
+	private func update(section: Section) {
 		var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
 		snapshot.appendSections(Section.allSections)
 		snapshot.appendItems(items, toSection: section)
