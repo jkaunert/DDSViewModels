@@ -40,6 +40,13 @@ public extension UICollectionDDSViewModel {
 		update(for: section)
 		completion?()
 	}
+	
+	private func update(for section: Section) {
+		var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+		snapshot.appendSections(Section.allSections)
+		snapshot.appendItems(items, toSection: section)
+		diffableDataSource?.apply(snapshot)
+	}
 }
 
 private extension UICollectionDDSViewModel {
@@ -50,11 +57,5 @@ private extension UICollectionDDSViewModel {
 		return cell
 	}
 	
-	private func update(for section: Section) {
-		var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
-		snapshot.appendSections([section])
-		snapshot.appendItems(items)
-		diffableDataSource?.apply(snapshot)
-	}
 }
 #endif
