@@ -7,6 +7,7 @@ public protocol DiffableSection: Hashable {
 	var id: UUID { get set }
 	var title: String { get set }
 	static var allSections: [Self] { get set }
+	static func returnSections() -> [Self]
 }
 
 

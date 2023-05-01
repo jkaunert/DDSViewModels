@@ -15,7 +15,11 @@ public struct DummySection: DiffableSection {
 extension DummySection: Hashable {
 	
 	public static var allSections: [DummySection] = [
-		DummySection(title: "Main"),
-		DummySection(title: "Secondary"),
+		DummySection(title: "dummySection1"),
+		DummySection(title: "dummySection2"),
 	]
+	
+	public static func returnSections() -> [DummySection] {
+		return self.allSections
+	}
 }

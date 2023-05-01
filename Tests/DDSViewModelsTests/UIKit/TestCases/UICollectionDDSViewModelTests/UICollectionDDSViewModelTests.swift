@@ -6,8 +6,9 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 	
 	private typealias DiffableDataSource = UICollectionViewDiffableDataSource<DummySection, DummyItem>
 	private typealias Snapshot = NSDiffableDataSourceSnapshot<DummySection, DummyItem>
-	private let dummySection1 = DummySection(title: "dummySection1")
-	private let dummySection2 = DummySection(title: "dummySection2")
+	private let dummySection1 = DummySection.allSections[0]
+	private let dummySection2 = DummySection.allSections[1]
+	
 	private let section1DummyItems: [DummyItem] = [
 		DummyItem(text: "dummy1"),
 		DummyItem(text: "dummy2"),
@@ -32,8 +33,8 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 
 	override func setUpWithError() throws {
 		try super.setUpWithError()
-		DummySection.allSections = [dummySection1
-		, dummySection2]
+//		DummySection.allSections = [dummySection1
+//		, dummySection2]
 		collectionVC = FakeUICollectionViewController()
 		sut = collectionVC.viewModel
 		collectionVC.loadViewIfNeeded()
@@ -43,7 +44,7 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 	}
 	
 	override func tearDownWithError() throws {
-		DummySection.allSections = []
+//		DummySection.allSections = nil
 		snapshot = nil
 		dataSource = nil
 		collectionVC = nil

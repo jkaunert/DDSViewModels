@@ -59,8 +59,8 @@ extension UITableDDSViewModel {
 	}
 
 	func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-		let sectionKind = Section.allSections[section]
-		return sectionKind.title
+		let section = Section.allSections[section]
+		return section.title
 	}
 	
 	func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {

@@ -1,7 +1,7 @@
 #if os(iOS) || os(tvOS)
 import UIKit
 
-open class UICollectionDDSViewModel<SectionType: Section, CellType: UICollectionViewCell & Providing>: NSObject, UICollectionViewDelegate {
+open class UICollectionDDSViewModel<SectionType: Section, CellType: UICollectionViewCell & Providing>: NSObject {
 	public typealias Section = SectionType
 	public typealias Item = CellType.Provided
 	
@@ -29,21 +29,24 @@ public extension UICollectionDDSViewModel {
 		return diffableDataSource
 	}
 	
-	func add(_ items: [Item], to section: SectionType, completion: (() -> Void)? = nil) {
+	func add(_ items: [Item], to section: Section, completion: (() -> Void)? = nil) {
+		
 		self.items.append(contentsOf: items)
 		update(for: section)
 		completion?()
 	}
 	
-	func remove(_ items: [Item], from section: SectionType, completion: (() -> Void)? = nil) {
+	func remove(_ items: [Item], from section: Section, completion: (() -> Void)? = nil) {
 		self.items.removeAll { items.contains($0) }
-		update(for: section)
+		update(section: section, items: items)
 		completion?()
 	}
 	
-	private func update(for section: Section) {
+	private func update(section: Section, items: [Item]) {
 		var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
-		snapshot.appendSections(Section.allSections)
+		let sections: [Section] = Section.returnSections()
+		print(sections)
+		snapshot.appendSections(sections)
 		snapshot.appendItems(items, toSection: section)
 		diffableDataSource?.apply(snapshot)
 	}
