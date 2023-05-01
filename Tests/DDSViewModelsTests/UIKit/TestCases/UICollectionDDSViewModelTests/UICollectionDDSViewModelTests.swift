@@ -6,26 +6,12 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 	
 	private typealias DiffableDataSource = UICollectionViewDiffableDataSource<DummySection, DummyItem>
 	private typealias Snapshot = NSDiffableDataSourceSnapshot<DummySection, DummyItem>
-	private let dummySection1 = DummySection.allSections[0]
-	private let dummySection2 = DummySection.allSections[1]
+	var sections: [DummySection]!
+	private var dummySection1: DummySection!
+	private var dummySection2: DummySection!
+	private var section1DummyItems: [DummyItem]!
 	
-	private let section1DummyItems: [DummyItem] = [
-		DummyItem(text: "dummy1"),
-		DummyItem(text: "dummy2"),
-		DummyItem(text: "dummy3"),
-		DummyItem(text: "dummy4"),
-		DummyItem(text: "dummy5"),
-		DummyItem(text: "dummy6"),
-	]
-	
-	private let section2DummyItems: [DummyItem] = [
-		DummyItem(text: "dummy7"),
-		DummyItem(text: "dummy8"),
-		DummyItem(text: "dummy9"),
-		DummyItem(text: "dummy10"),
-		DummyItem(text: "dummy11"),
-		DummyItem(text: "dummy12"),
-	]
+	private var section2DummyItems: [DummyItem]!
 	private var collectionVC: FakeUICollectionViewController!
 	private var dataSource: DiffableDataSource!
 	private var snapshot: Snapshot!
@@ -35,6 +21,27 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		try super.setUpWithError()
 //		DummySection.allSections = [dummySection1
 //		, dummySection2]
+		section1DummyItems = [
+			DummyItem(text: "dummy1"),
+			DummyItem(text: "dummy2"),
+			DummyItem(text: "dummy3"),
+			DummyItem(text: "dummy4"),
+			DummyItem(text: "dummy5"),
+			DummyItem(text: "dummy6"),
+		]
+		
+		section2DummyItems = [
+			DummyItem(text: "dummy7"),
+		 DummyItem(text: "dummy8"),
+		 DummyItem(text: "dummy9"),
+		 DummyItem(text: "dummy10"),
+		 DummyItem(text: "dummy11"),
+		 DummyItem(text: "dummy12"),
+	 ]
+		sections = DummySection.returnSections()
+		print(sections)
+		dummySection1 = sections[0]
+		dummySection2 = sections[1]
 		collectionVC = FakeUICollectionViewController()
 		sut = collectionVC.viewModel
 		collectionVC.loadViewIfNeeded()
@@ -45,6 +52,11 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 	
 	override func tearDownWithError() throws {
 //		DummySection.allSections = nil
+		section1DummyItems = nil
+		section2DummyItems = nil
+		dummySection1 = nil
+		dummySection2 = nil
+		sections = nil
 		snapshot = nil
 		dataSource = nil
 		collectionVC = nil
@@ -71,7 +83,7 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		let e1 = expectation(description: "test_apply_whenAppendingItemsToMainSection_shouldDiffCorrectly() e1")
 		dataSource.apply(snapshot, completion: e1.fulfill)
 		wait(for: [e1], timeout: 1)
-		snapshot.appendSections([dummySection1])
+		snapshot.appendSections([dummySection1, dummySection2])
 		snapshot.appendItems([section1DummyItems[0]])
 		XCTAssertEqual(snapshot.numberOfItems, 1)
 

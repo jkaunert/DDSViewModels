@@ -37,12 +37,14 @@ public extension UICollectionDDSViewModel {
 	}
 	
 	func remove(_ items: [Item], from section: Section, completion: (() -> Void)? = nil) {
+		
 		self.items.removeAll { items.contains($0) }
-		update(section: section, items: items)
+		update(for: section)
 		completion?()
 	}
 	
-	private func update(section: Section, items: [Item]) {
+	private func update(for section: Section) {
+		
 		var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
 		let sections: [Section] = Section.returnSections()
 		print(sections)
