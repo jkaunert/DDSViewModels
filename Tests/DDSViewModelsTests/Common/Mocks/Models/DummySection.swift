@@ -2,13 +2,18 @@ import XCTest
 @testable import DDSViewModels
 
 public struct DummySection: DiffableSection {
+	public var items: [DummyItem]
+	
+	public typealias Item = DummyItem
+	
 	public typealias Section = Self
 	
 	public var id = UUID()
 	public var title: String
 
-	init(title: String) {
+	init(title: String, items: [DummyItem] = []) {
 		self.title = title
+		self.items = items
 	}
 }
 
