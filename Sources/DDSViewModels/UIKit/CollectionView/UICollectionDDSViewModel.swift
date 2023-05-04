@@ -26,24 +26,7 @@ public extension UICollectionDDSViewModel {
 	func makeDiffableDataSource() -> UICollectionViewDiffableDataSource<Section, Item> {
 		guard let collectionView else { fatalError("CollectionView should exist but doesn't") }
 		let diffableDataSource = UICollectionViewDiffableDataSource<Section, Item>(collectionView: collectionView, cellProvider: cellProvider)
-		diffableDataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
-			var reusableView: UICollectionReusableView?
-			switch kind {
-					case UICollectionView.elementKindSectionHeader:
-					let section = self.diffableDataSource?.snapshot()
-						.sectionIdentifiers[indexPath.section]
-					let view = collectionView.dequeueReusableSupplementaryView(
-						ofKind: kind,
-						withReuseIdentifier: SectionHeaderReusableView.reuseIdentifier,
-						for: indexPath) as? SectionHeaderReusableView
-					view?.titleLabel.text = section?.title
-					reusableView = view
-					
-				default:
-					reusableView = nil
-			}
-			return reusableView
-		}
+		diffableDataSource.supplementaryViewProvider = supplementaryViewProvider(collectionView:kind:indexPath:)
 		self.diffableDataSource = diffableDataSource
 		return diffableDataSource
 	}
@@ -70,5 +53,23 @@ private extension UICollectionDDSViewModel {
 		return cell
 	}
 	
+	private func supplementaryViewProvider(collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? {
+		var reusableView: UICollectionReusableView?
+		switch kind {
+				case UICollectionView.elementKindSectionHeader:
+				let section = self.diffableDataSource?.snapshot()
+					.sectionIdentifiers[indexPath.section]
+				let view = collectionView.dequeueReusableSupplementaryView(
+					ofKind: kind,
+					withReuseIdentifier: SectionHeaderReusableView.reuseIdentifier,
+					for: indexPath) as? SectionHeaderReusableView
+				view?.titleLabel.text = section?.title
+				reusableView = view
+				
+			default:
+				reusableView = nil
+		}
+		return reusableView
+	}
 }
 #endif

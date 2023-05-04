@@ -22,6 +22,12 @@ final class FakeUICollectionViewController: UIViewController, UICollectionViewDe
 		
 		collectionView.register(FakeUICollectionViewCell.self, forCellWithReuseIdentifier: "FakeUICollectionViewCell")
 		
+		collectionView.register(
+			SectionHeaderReusableView.self,
+			forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+			withReuseIdentifier: SectionHeaderReusableView.reuseIdentifier
+		)
+		
 		collectionView.delegate = viewModel as? any UICollectionViewDelegate
 		
 		if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
