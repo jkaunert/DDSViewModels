@@ -27,6 +27,11 @@ public extension UICollectionDDSViewModel {
 		guard let collectionView else { fatalError("CollectionView should exist but doesn't") }
 		let diffableDataSource = UICollectionViewDiffableDataSource<Section, Item>(collectionView: collectionView, cellProvider: cellProvider)
 		diffableDataSource.supplementaryViewProvider = supplementaryViewProvider(collectionView:kind:indexPath:)
+		collectionView.register(
+			SectionHeaderReusableView.self,
+			forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+			withReuseIdentifier: SectionHeaderReusableView.reuseIdentifier
+		)
 		self.diffableDataSource = diffableDataSource
 		return diffableDataSource
 	}
