@@ -39,7 +39,7 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		 DummyItem(text: "dummy12"),
 	 ]
 		sections = DummySection.returnSections()
-		print(sections)
+//		print(sections)
 		dummySection1 = sections[0]
 		dummySection2 = sections[1]
 		collectionVC = FakeUICollectionViewController()
@@ -154,10 +154,37 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		XCTAssertEqual(snapshot.numberOfItems, 0)
 	}
 	
+	func test_apply_whenAppendingItemsToMultipleSections_shouldDiffCorrectly() {
+	
+		let e1 = expectation(description: "test_apply_whenAppendingItemsToMultipleSections_shouldDiffCorrectly() e1")
+		dataSource.apply(snapshot, completion: e1.fulfill)
+		wait(for: [e1], timeout: 1)
+		snapshot.appendSections([dummySection1, dummySection2])
+		snapshot.appendItems([section1DummyItems[0]])
+		XCTAssertEqual(snapshot.numberOfItems, 1)
+
+		let e2 = expectation(description: "test_apply_whenAppendingItemsToMultipleSections_shouldDiffCorrectly() e2")
+		dataSource.apply(snapshot, completion: e2.fulfill)
+		wait(for: [e2], timeout: 1)
+		XCTAssertEqual(snapshot.numberOfItems, 1)
+
+		let e3 = expectation(description: "test_apply_whenAppendingItemsToMultipleSections_shouldDiffCorrectly() e3")
+		dataSource.apply(snapshot, completion: e3.fulfill)
+		wait(for: [e3], timeout: 1)
+		snapshot.appendItems([section1DummyItems[1]])
+		XCTAssertEqual(snapshot.numberOfItems, 2)
+
+		let e4 = expectation(description: "test_apply_whenAppendingItemsToMultipleSections_shouldDiffCorrectly() e4")
+		dataSource.apply(snapshot, completion: e4.fulfill)
+		wait(for: [e4], timeout: 1)
+		XCTAssertEqual(snapshot.numberOfItems, 2)
+	}
+
+	
 //	func test_add() {
 //		
 //		let e1 = expectation(description: "test_add() e1")
-//		sut.add([(section: sut.sections[0], items: [DummyItem(text: "DummyItem")])]) {
+//		sut.add(items: [(section: sut.sections[0], items: [DummyItem(text: "DummyItem")])]) {
 //			e1.fulfill()
 //		}
 //		

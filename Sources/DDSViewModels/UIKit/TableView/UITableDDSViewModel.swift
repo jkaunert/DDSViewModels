@@ -4,7 +4,7 @@ import UIKit
 open class UITableDDSViewModel<SectionType: Section, CellType: UITableViewCell & Providing>: NSObject {
 	
 	public typealias Section = SectionType
-	public typealias Item = CellType.Provided
+	public typealias Item = SectionType.Item
 
 	@Published public var items: [Item] = .init([])
 	
@@ -54,7 +54,7 @@ extension UITableDDSViewModel {
 	
 	private func cellProvider(_ tableView: UITableView, indexPath: IndexPath, item: Item) -> UITableViewCell? {
 		let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! CellType
-		cell.provide(item)
+		cell.provide(item as! CellType.Provided)
 		return cell
 	}
 

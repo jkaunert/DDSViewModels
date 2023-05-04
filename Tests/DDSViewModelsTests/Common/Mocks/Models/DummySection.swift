@@ -15,6 +15,14 @@ public struct DummySection: DiffableSection {
 		self.title = title
 		self.items = items
 	}
+	
+	public func hash(into hasher: inout Hasher) {
+		hasher.combine(id)
+	}
+	
+	public static func == (lhs: DummySection, rhs: DummySection) -> Bool {
+		lhs.id == rhs.id
+	}
 }
 
 extension DummySection: Hashable {
