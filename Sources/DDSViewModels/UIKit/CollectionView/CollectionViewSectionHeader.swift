@@ -1,8 +1,9 @@
+#if os(iOS) || os(tvOS)
 import UIKit
 
-class SectionHeaderReusableView: UICollectionReusableView {
+open class CollectionViewSectionHeader: UICollectionReusableView {
 	static var reuseIdentifier: String {
-		return String(describing: SectionHeaderReusableView.self)
+		return String(describing: CollectionViewSectionHeader.self)
 	}
 	
 	lazy var titleLabel: UILabel = {
@@ -50,7 +51,8 @@ class SectionHeaderReusableView: UICollectionReusableView {
 		])
 	}
 	
-	required init?(coder: NSCoder) {
+	required public init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 }
+#endif

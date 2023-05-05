@@ -1,15 +1,18 @@
 #if os(iOS) || os(tvOS)
 import UIKit
 
-open class UICollectionDDSViewModel<SectionType: Section, CellType: UICollectionViewCell & Providing>: NSObject {
+open class UICollectionDDSViewModel<SectionType: Section, CellType: UICollectionViewCell & Providing>: NSObject, UICollectionViewDelegate {
+	
 	public typealias Section = SectionType
 	public typealias Item = Section.Item
+	public typealias Provided = CellType.Provided
 	
-//	@Published public var items: [Item] = .init([])
 	@Published public var sections: [Section] = .init(Section.allSections)
+	
 	private weak var collectionView: UICollectionView?
 	
 	public private(set) var diffableDataSource: UICollectionViewDiffableDataSource<Section, Item>?
+	
 	public var snapshot = NSDiffableDataSourceSnapshot<Section, Item>.init()
 	
 	private var cellIdentifier: String
@@ -26,13 +29,14 @@ public extension UICollectionDDSViewModel {
 	func makeDiffableDataSource() -> UICollectionViewDiffableDataSource<Section, Item> {
 		guard let collectionView else { fatalError("CollectionView should exist but doesn't") }
 		let diffableDataSource = UICollectionViewDiffableDataSource<Section, Item>(collectionView: collectionView, cellProvider: cellProvider)
-		diffableDataSource.supplementaryViewProvider = supplementaryViewProvider(collectionView:kind:indexPath:)
+		diffableDataSource.supplementaryViewProvider =  supplementaryViewProvider(collectionView:kind:indexPath:)
 		collectionView.register(
-			SectionHeaderReusableView.self,
+			CollectionViewSectionHeader.self,
 			forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-			withReuseIdentifier: SectionHeaderReusableView.reuseIdentifier
+			withReuseIdentifier: CollectionViewSectionHeader.reuseIdentifier
 		)
 		self.diffableDataSource = diffableDataSource
+		self.collectionView?.delegate = self
 		return diffableDataSource
 	}
 	
@@ -43,31 +47,31 @@ public extension UICollectionDDSViewModel {
 		}
 		diffableDataSource?.apply(snapshot, animatingDifferences: animatingDifferences)
 	}
-
+	
 	func update(animatingDifferences: Bool = true) {
 		self.applySnapshot(animatingDifferences: animatingDifferences)
 	}
-
+	
 }
 
 private extension UICollectionDDSViewModel {
 	
 	private func cellProvider(_ collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell? {
 		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! CellType
-		cell.provide(item as! CellType.Provided)
+		cell.provide(item as! Provided)
 		return cell
 	}
 	
 	private func supplementaryViewProvider(collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? {
 		var reusableView: UICollectionReusableView?
 		switch kind {
-				case UICollectionView.elementKindSectionHeader:
+			case UICollectionView.elementKindSectionHeader:
 				let section = self.diffableDataSource?.snapshot()
 					.sectionIdentifiers[indexPath.section]
 				let view = collectionView.dequeueReusableSupplementaryView(
 					ofKind: kind,
-					withReuseIdentifier: SectionHeaderReusableView.reuseIdentifier,
-					for: indexPath) as? SectionHeaderReusableView
+					withReuseIdentifier: CollectionViewSectionHeader.reuseIdentifier,
+					for: indexPath) as? CollectionViewSectionHeader
 				view?.titleLabel.text = section?.title
 				reusableView = view
 				
