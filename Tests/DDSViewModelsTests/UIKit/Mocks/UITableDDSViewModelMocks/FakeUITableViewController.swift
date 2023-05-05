@@ -3,7 +3,7 @@ import XCTest
 import Combine
 @testable import DDSViewModels
 
-final class FakeUITableViewController: UIViewController {
+final class FakeUITableViewController: UIViewController, UITableViewDelegate {
 	
 	var tableView = MockUITableView()
 	
@@ -22,9 +22,14 @@ final class FakeUITableViewController: UIViewController {
 		
 		tableView.register(FakeUITableViewCell.self, forCellReuseIdentifier: "FakeUITableViewCell")
 		
-		tableView.delegate = viewModel
+		tableView.delegate = viewModel.diffableDataSource as? any UITableViewDelegate
 
 	}
+	
+	
+//	private func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//		return viewModel.snapshot.sectionIdentifiers[section].title.capitalized
+//	}
 }
 #endif
 
