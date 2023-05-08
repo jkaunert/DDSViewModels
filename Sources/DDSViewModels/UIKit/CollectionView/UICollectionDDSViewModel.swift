@@ -40,18 +40,41 @@ public extension UICollectionDDSViewModel {
 		return diffableDataSource
 	}
 	
-	private func applySnapshot(animatingDifferences: Bool = true) {
+	private func applySnapshot(animatingDifferences: Bool = true, completion: (() -> Void)? = nil) {
+		snapshot.deleteAllItems()
 		snapshot.appendSections(sections)
 		sections.forEach { section in
 			snapshot.appendItems(section.items, toSection: section)
 		}
 		diffableDataSource?.apply(snapshot, animatingDifferences: animatingDifferences)
+		completion?()
 	}
 	
-	func update(animatingDifferences: Bool = true) {
-		self.applySnapshot(animatingDifferences: animatingDifferences)
+	func update(animatingDifferences: Bool = true, completion: (() -> Void)? = nil) {
+		applySnapshot(animatingDifferences: animatingDifferences)
+		completion?()
 	}
 	
+	func add(_ items: [Item], toSection: inout Section, animate: Bool = true, completion: (() -> Void)? = nil) {
+		
+		toSection.items.append(contentsOf: items)
+		update(animatingDifferences: animate)
+		completion?()
+	}
+	
+	func remove(_ items: [Item], fromSection: inout Section, animate: Bool = true, completion: (() -> Void)? = nil) {
+		
+		fromSection.items.removeAll { items.contains($0) }
+		update(animatingDifferences: animate)
+		completion?()
+	}
+	
+	func move(_ items: [Item], fromSection: inout Section, toSection: inout Section, animate: Bool = true, completion: (() -> Void)? = nil) {
+		
+		remove(items, fromSection: &fromSection, animate: animate)
+		add(items, toSection: &toSection, animate: animate)
+		completion?()
+	}
 }
 
 private extension UICollectionDDSViewModel {
