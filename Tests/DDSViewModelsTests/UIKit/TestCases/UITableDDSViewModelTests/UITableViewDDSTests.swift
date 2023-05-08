@@ -4,37 +4,41 @@ import XCTest
 
 final class UITableViewDDSTests: XCTestCase {
 	
-	private typealias Snapshot = NSDiffableDataSourceSnapshot<DummySection, FakeUITableViewCell.Provided>
-	
+	private typealias Snapshot = NSDiffableDataSourceSnapshot<DummySection, DummyItem>
+	private var sut: UITableViewDiffableDataSource<DummySection, DummyItem>!
 	private var tableView: MockUITableView!
 	private var sutCell: FakeUITableViewCell!
-	private var sut: UITableViewDiffableDataSource<DummySection, DummyItem>!
 	private var snapshot: Snapshot!
 	
-	private var sections: [DummySection] = [
-		DummySection(title: "DummyTitle1"),
-		DummySection(title: "DummyTitle2"),
-		DummySection(title: "DummyTitle3"),
-		DummySection(title: "DummyTitle4"),
-		DummySection(title: "DummyTitle5"),
-		DummySection(title: "DummyTitle6"),
-		DummySection(title: "DummyTitle7"),
-
-	]
+	private var sections: [DummySection]!
 	
-	private let items = [
-		DummyItem(text: "Dummy Item 1"),
-		DummyItem(text: "Dummy Item 2"),
-		DummyItem(text: "Dummy Item 3"),
-		DummyItem(text: "Dummy Item 4"),
-		DummyItem(text: "Dummy Item 5"),
-		DummyItem(text: "Dummy Item 6"),
-		DummyItem(text: "Dummy Item 7"),
-		DummyItem(text: "Dummy Item 8"),
-	]
+	private var items: [DummyItem]!
 	
 	override func setUpWithError() throws {
 		try super.setUpWithError()
+		
+		sections = [
+			DummySection(title: "DummyTitle1"),
+			DummySection(title: "DummyTitle2"),
+			DummySection(title: "DummyTitle3"),
+			DummySection(title: "DummyTitle4"),
+			DummySection(title: "DummyTitle5"),
+			DummySection(title: "DummyTitle6"),
+			DummySection(title: "DummyTitle7"),
+
+		]
+		
+		items = [
+			DummyItem(text: "Dummy Item 1"),
+		 DummyItem(text: "Dummy Item 2"),
+		 DummyItem(text: "Dummy Item 3"),
+		 DummyItem(text: "Dummy Item 4"),
+		 DummyItem(text: "Dummy Item 5"),
+		 DummyItem(text: "Dummy Item 6"),
+		 DummyItem(text: "Dummy Item 7"),
+		 DummyItem(text: "Dummy Item 8"),
+	 ]
+		
 		tableView = MockUITableView()
 		sutCell = FakeUITableViewCell()
 		sut = UITableViewDiffableDataSource<DummySection, DummyItem>(tableView: tableView) { _, _, _ in
@@ -46,13 +50,15 @@ final class UITableViewDDSTests: XCTestCase {
 	override func tearDownWithError() throws {
 		snapshot = nil
 		sut = nil
-		tableView = nil
 		sutCell = nil
+		tableView = nil
+		items = nil
+		sections = nil
 		try super.tearDownWithError()
 	}
 	
 	func test_whenInit_dataSourceShouldBeCorrectlySetup() {
-
+		XCTAssertNotNil(tableView.dataSource, "precondition")
 		XCTAssertTrue(tableView.dataSource === sut)
 	}
 	

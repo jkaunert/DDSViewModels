@@ -5,7 +5,7 @@ import Combine
 
 final class FakeUITableViewController: UIViewController, UITableViewDelegate {
 	
-	var tableView = MockUITableView()
+	lazy var tableView = MockUITableView()
 	
 	private var cancellables = [AnyCancellable]()
 	

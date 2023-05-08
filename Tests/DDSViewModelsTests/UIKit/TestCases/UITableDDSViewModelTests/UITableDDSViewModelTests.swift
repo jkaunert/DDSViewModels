@@ -4,49 +4,78 @@ import XCTest
 
 final class UITableDDSViewModelTests: XCTestCase {
 	
+	private typealias DiffableDataSource = UITableViewDiffableDataSource<DummySection, DummyItem>
+	
 	private typealias Snapshot = NSDiffableDataSourceSnapshot<DummySection, DummyItem>
 	
-	private let dummySection1 = DummySection(title: "dummySection")
-	private let dummySection2 = DummySection(title: "dummySection2")
+	var sections: [DummySection]!
 	
-	private let section1DummyItems: [DummyItem] = [
-		DummyItem(text: "dummy1"),
-		DummyItem(text: "dummy2"),
-		DummyItem(text: "dummy3"),
-		DummyItem(text: "dummy4"),
-		DummyItem(text: "dummy5"),
-		DummyItem(text: "dummy6"),
-	]
+	private var dummySection1: DummySection!
 	
-	private let section2DummyItems: [DummyItem] = [
-		DummyItem(text: "dummy7"),
-		DummyItem(text: "dummy8"),
-		DummyItem(text: "dummy9"),
-		DummyItem(text: "dummy10"),
-		DummyItem(text: "dummy11"),
-		DummyItem(text: "dummy12"),
-	]
+	private var dummySection2: DummySection!
 	
-	private var sut: UITableDDSViewModel<DummySection, FakeUITableViewCell>!
+	private var section1DummyItems: [DummyItem]!
+	
+	private var section2DummyItems: [DummyItem]!
+	
 	private var tableVC: FakeUITableViewController!
-	private var dataSource: UITableViewDiffableDataSource<DummySection, DummyItem>!
+	
+	private var dataSource: DiffableDataSource!
+	
 	private var snapshot: Snapshot!
 	
+	private var sut: UITableDDSViewModel<DummySection, FakeUITableViewCell>!
+	
 	override func setUpWithError() throws {
+		
 		try super.setUpWithError()
-		DummySection.allSections = [dummySection1, dummySection2]
+		
+		section1DummyItems = [
+			DummyItem(text: "dummy1"),
+			DummyItem(text: "dummy2"),
+			DummyItem(text: "dummy3"),
+			DummyItem(text: "dummy4"),
+			DummyItem(text: "dummy5"),
+			DummyItem(text: "dummy6"),
+		]
+		
+		section2DummyItems = [
+			DummyItem(text: "dummy7"),
+		 DummyItem(text: "dummy8"),
+		 DummyItem(text: "dummy9"),
+		 DummyItem(text: "dummy10"),
+		 DummyItem(text: "dummy11"),
+		 DummyItem(text: "dummy12"),
+	 ]
+		
+		sections = DummySection.returnSections()
+		
+		dummySection1 = sections[0]
+		
+		dummySection2 = sections[1]
+
 		tableVC = FakeUITableViewController()
-		tableVC.loadViewIfNeeded()
+		
 		sut = tableVC.viewModel
+		
+		tableVC.loadViewIfNeeded()
+		
 		dataSource = sut.diffableDataSource
+		
 		snapshot = Snapshot()
 	}
 	
 	override func tearDownWithError() throws {
 		
+		section1DummyItems = nil
+		section2DummyItems = nil
+		dummySection1 = nil
+		dummySection2 = nil
+		sections = nil
 		snapshot = nil
 		dataSource = nil
 		tableVC = nil
+		try super.tearDownWithError()
 	}
 	
 	func test_viewController_tableView_shouldBeSetUp() throws {
@@ -113,7 +142,9 @@ final class UITableDDSViewModelTests: XCTestCase {
 			section1DummyItems[2],
 			section1DummyItems[3],
 		])
+		
 		snapshot.deleteItems([section1DummyItems[2]])
+		
 		XCTAssertEqual(snapshot.numberOfItems, 2)
 
 		let e4 = expectation(description: "test_apply_whenRemovingItemsFromMainSection_shouldDiffCorrectly() e4")
@@ -123,6 +154,31 @@ final class UITableDDSViewModelTests: XCTestCase {
 		XCTAssertEqual(snapshot.numberOfItems, 1)
 	}
 
+	func test_add_whenAddingOneItemToSection_shouldAppendItemToSectionItems() {
+		let e1 = expectation(description: "test_add_whenAddingOneItemToSection_shouldAppendItemToSectionItems() e1")
+		
+		sut.add([DummyItem(text: "DummyItem")], toSection: &sut.sections[0]) { e1.fulfill() }
+		wait(for: [e1], timeout: 1)
+		XCTAssertEqual(sut.sections[0].items.count, 1)
+	}
+	
+	func test_remove_whenRemovingOneItemFromOneSection_shouldRemoveItemFromSectionItems() {
+		
+		let dummyItem = DummyItem(text: "DummyItem")
+		let e1 = expectation(description: "test_remove_whenRemovingOneItemFromOneSection_shouldRemoveItemFromSectionItems() e1")
+		
+		sut.add([dummyItem], toSection: &sut.sections[0]) { e1.fulfill() }
+		wait(for: [e1], timeout: 1)
+		XCTAssertEqual(sut.sections[0].items.count, 1, "precondition")
+		
+		let e2 = expectation(description: "test_remove_whenRemovingOneItemFromOneSection_shouldRemoveItemFromSectionItems() e2")
+		sut.remove([dummyItem], fromSection: &sut.sections[0]) {
+			e2.fulfill()
+		}
+		wait(for: [e2], timeout: 1)
+		XCTAssertEqual(sut.sections[0].items.count, 0)
+	}
+	
 	func test_apply_whenRemovingAllItemsFromMainSection_shouldDiffCorrectly() {
 		
 		let e1 = expectation(description: "test_apply_whenRemovingAllItemsFromMainSection_shouldDiffCorrectly() e1")
@@ -172,7 +228,7 @@ final class UITableDDSViewModelTests: XCTestCase {
 //	}
 
 //	func test_remove() {
-//		
+//
 //		let e1 = expectation(description: "test_remove() e1")
 //		sut.add([
 //			section1DummyItems[0],

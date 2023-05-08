@@ -24,35 +24,69 @@ open class UITableDDSViewModel<SectionType: Section, CellType: UITableViewCell &
 	}
 }
 
-extension UITableDDSViewModel {
+public extension UITableDDSViewModel {
 	
 	func makeDiffableDataSource() -> UITableViewDiffableDataSource<Section, Item> {
 		guard let tableView else { fatalError("TableView should exist but doesn't") }
 		let diffableDataSource = UITableViewDiffableDataSource<Section, Item>(tableView: tableView, cellProvider: cellProvider)
 		self.diffableDataSource = diffableDataSource
-		tableView.delegate = self
+		self.tableView?.delegate = self
 		return diffableDataSource
 	}
 	
-	private func applySnapshot(animatingDifferences: Bool = true) {
+	private func applySnapshot(animatingDifferences: Bool = true, completion: (() -> Void)? = nil) {
+		snapshot.deleteAllItems()
 		snapshot.appendSections(sections)
 		sections.forEach { section in
 			snapshot.appendItems(section.items, toSection: section)
 		}
 		diffableDataSource?.apply(snapshot, animatingDifferences: animatingDifferences)
+		completion?()
 	}
 	
-	func update(animatingDifferences: Bool = true) {
+	func update(animatingDifferences: Bool = true, completion: (() -> Void)? = nil) {
 		self.applySnapshot(animatingDifferences: animatingDifferences)
+		completion?()
+	}
+	
+	func add(_ items: [Item], toSection: inout Section, animate: Bool = true, completion: (() -> Void)? = nil) {
+		
+		toSection.items.append(contentsOf: items)
+		update(animatingDifferences: animate)
+		completion?()
+	}
+	
+	func remove(_ items: [Item], fromSection: inout Section, animate: Bool = true, completion: (() -> Void)? = nil) {
+		
+		fromSection.items.removeAll { items.contains($0) }
+		update(animatingDifferences: animate)
+		completion?()
+	}
+	
+	func move(_ items: [Item], fromSection: inout Section, toSection: inout Section, animate: Bool = true, completion: (() -> Void)? = nil) {
+		
+		remove(items, fromSection: &fromSection, animate: animate)
+		add(items, toSection: &toSection, animate: animate)
+		completion?()
 	}
 }
 
-extension UITableDDSViewModel {
+private extension UITableDDSViewModel {
 	
 	private func cellProvider(_ tableView: UITableView, indexPath: IndexPath, item: Item) -> UITableViewCell? {
 		let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! CellType
 		cell.provide(item as! Provided)
 		return cell
+	}
+	
+	private func sectionHeaderViewProvider(tableView: UITableView, kind: String, indexPath: IndexPath) -> UITableViewHeaderFooterView? {
+		var reusableView: UITableViewHeaderFooterView?
+		switch kind {
+				
+			default:
+				reusableView = nil
+		}
+		return reusableView
 	}
 
 	func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
