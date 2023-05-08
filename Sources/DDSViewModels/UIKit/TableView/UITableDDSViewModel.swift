@@ -22,14 +22,24 @@ open class UITableDDSViewModel<SectionType: Section, CellType: UITableViewCell &
 		self.cellIdentifier = cellReuseIdentifier
 		super.init()
 	}
+	
+	public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
+	
+	public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+		sectionHeaderViewProvider(tableView: tableView, section: section)
+	}
+	
 }
 
 public extension UITableDDSViewModel {
 	
 	func makeDiffableDataSource() -> UITableViewDiffableDataSource<Section, Item> {
-		guard let tableView else { fatalError("TableView should exist but doesn't") }
+		guard let tableView = self.tableView else { fatalError("TableView should exist but doesn't") }
 		let diffableDataSource = UITableViewDiffableDataSource<Section, Item>(tableView: tableView, cellProvider: cellProvider)
+		tableView.register(TableViewSectionHeader.self, forHeaderFooterViewReuseIdentifier: TableViewSectionHeader.reuseIdentifier)
+		tableView.register(CellType.self, forCellReuseIdentifier: cellIdentifier)
 		self.diffableDataSource = diffableDataSource
+		self.tableView = tableView
 		self.tableView?.delegate = self
 		return diffableDataSource
 	}
@@ -69,6 +79,8 @@ public extension UITableDDSViewModel {
 		add(items, toSection: &toSection, animate: animate)
 		completion?()
 	}
+	
+	
 }
 
 private extension UITableDDSViewModel {
@@ -79,19 +91,12 @@ private extension UITableDDSViewModel {
 		return cell
 	}
 	
-	private func sectionHeaderViewProvider(tableView: UITableView, kind: String, indexPath: IndexPath) -> UITableViewHeaderFooterView? {
-		var reusableView: UITableViewHeaderFooterView?
-		switch kind {
-				
-			default:
-				reusableView = nil
-		}
+	private func sectionHeaderViewProvider(tableView: UITableView, section: Int) -> UITableViewHeaderFooterView? {
+		let section = self.diffableDataSource?.snapshot()
+			.sectionIdentifiers[section]
+		let reusableView = tableView.dequeueReusableHeaderFooterView(withIdentifier: TableViewSectionHeader.reuseIdentifier) as! TableViewSectionHeader
+		reusableView.titleLabel.text = section?.title
 		return reusableView
 	}
-
-	func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-		return snapshot.sectionIdentifiers[section].title.capitalized
-	}
-	
 }
 #endif

@@ -22,12 +22,14 @@ open class UICollectionDDSViewModel<SectionType: Section, CellType: UICollection
 		self.cellIdentifier = cellReuseIdentifier
 		super.init()
 	}
+	
+	public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {}
 }
 
 public extension UICollectionDDSViewModel {
 	
 	func makeDiffableDataSource() -> UICollectionViewDiffableDataSource<Section, Item> {
-		guard let collectionView else { fatalError("CollectionView should exist but doesn't") }
+		guard let collectionView = self.collectionView else { fatalError("CollectionView should exist but doesn't") }
 		let diffableDataSource = UICollectionViewDiffableDataSource<Section, Item>(collectionView: collectionView, cellProvider: cellProvider)
 		diffableDataSource.supplementaryViewProvider =  supplementaryViewProvider(collectionView:kind:indexPath:)
 		collectionView.register(
@@ -35,7 +37,9 @@ public extension UICollectionDDSViewModel {
 			forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
 			withReuseIdentifier: CollectionViewSectionHeader.reuseIdentifier
 		)
+		collectionView.register(CellType.self, forCellWithReuseIdentifier: cellIdentifier)
 		self.diffableDataSource = diffableDataSource
+		self.collectionView = collectionView
 		self.collectionView?.delegate = self
 		return diffableDataSource
 	}

@@ -20,8 +20,6 @@ final class FakeUICollectionViewController: UIViewController, UICollectionViewDe
 	private func configureCollectionView() {
 		collectionView.dataSource = viewModel.makeDiffableDataSource()
 		
-		collectionView.register(FakeUICollectionViewCell.self, forCellWithReuseIdentifier: "FakeUICollectionViewCell")
-		
 		if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
 			layout.estimatedItemSize = CGSize(width: UIScreen.main.bounds.width * 0.9, height: 100)
 		}
