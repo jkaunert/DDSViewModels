@@ -23,9 +23,9 @@ open class UITableDDSViewModel<SectionType: Section, CellType: UITableViewCell &
 		super.init()
 	}
 	
-	public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
+	open func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
 	
-	public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+	open func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 		sectionHeaderViewProvider(tableView: tableView, section: section)
 	}
 	

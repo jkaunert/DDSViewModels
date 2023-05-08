@@ -23,7 +23,7 @@ open class UICollectionDDSViewModel<SectionType: Section, CellType: UICollection
 		super.init()
 	}
 	
-	public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {}
+	open func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {}
 }
 
 public extension UICollectionDDSViewModel {
