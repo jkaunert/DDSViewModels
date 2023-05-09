@@ -7,7 +7,7 @@ open class TableViewSectionHeader: UITableViewHeaderFooterView {
 		return String(describing: TableViewSectionHeader.self)
 	}
 	
-	lazy var titleLabel: UILabel = {
+	lazy public var titleLabel: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.font = UIFont.systemFont(

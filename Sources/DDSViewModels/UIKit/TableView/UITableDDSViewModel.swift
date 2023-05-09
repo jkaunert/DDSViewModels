@@ -48,12 +48,14 @@ public extension UITableDDSViewModel {
 		snapshot.deleteAllItems()
 		snapshot.appendSections(sections)
 		sections.forEach { section in
+			snapshot.deleteItems(section.items)
 			snapshot.appendItems(section.items, toSection: section)
 		}
+		
 		diffableDataSource?.apply(snapshot, animatingDifferences: animatingDifferences)
 		completion?()
 	}
-	
+
 	func update(animatingDifferences: Bool = true, completion: (() -> Void)? = nil) {
 		self.applySnapshot(animatingDifferences: animatingDifferences)
 		completion?()

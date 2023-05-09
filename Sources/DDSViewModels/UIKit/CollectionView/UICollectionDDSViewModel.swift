@@ -45,7 +45,6 @@ public extension UICollectionDDSViewModel {
 	}
 	
 	private func applySnapshot(animatingDifferences: Bool = true, completion: (() -> Void)? = nil) {
-		snapshot = NSDiffableDataSourceSnapshot<Section, Item>.init()
 		snapshot.deleteAllItems()
 		snapshot.appendSections(sections)
 		sections.forEach { section in
@@ -54,7 +53,6 @@ public extension UICollectionDDSViewModel {
 		}
 		
 		diffableDataSource?.apply(snapshot, animatingDifferences: animatingDifferences)
-		
 		completion?()
 	}
 	
@@ -70,7 +68,6 @@ public extension UICollectionDDSViewModel {
 	}
 	
 	func remove(_ items: [Item], fromSection: inout Section, animate: Bool = true, completion: (() -> Void)? = nil) {
-		
 		fromSection.items.removeAll { items.contains($0) }
 		update(animatingDifferences: animate)
 		completion?()

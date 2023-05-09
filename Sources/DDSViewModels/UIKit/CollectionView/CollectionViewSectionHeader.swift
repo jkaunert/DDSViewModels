@@ -6,7 +6,7 @@ open class CollectionViewSectionHeader: UICollectionReusableView {
 		return String(describing: CollectionViewSectionHeader.self)
 	}
 	
-	lazy var titleLabel: UILabel = {
+	lazy open var titleLabel: UILabel = {
 		let label = UILabel()
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.font = UIFont.systemFont(
@@ -21,7 +21,7 @@ open class CollectionViewSectionHeader: UICollectionReusableView {
 		return label
 	}()
 	
-	override init(frame: CGRect) {
+	public override init(frame: CGRect) {
 		super.init(frame: frame)
 		backgroundColor = .systemBackground
 		addSubview(titleLabel)
