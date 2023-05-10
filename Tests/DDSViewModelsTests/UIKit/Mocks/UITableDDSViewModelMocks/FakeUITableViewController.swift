@@ -3,7 +3,7 @@ import XCTest
 import Combine
 @testable import DDSViewModels
 
-final class FakeUITableViewController: UIViewController, UITableViewDelegate {
+final class FakeUITableViewController: UIViewController {
 	
 	lazy var tableView = MockUITableView()
 	

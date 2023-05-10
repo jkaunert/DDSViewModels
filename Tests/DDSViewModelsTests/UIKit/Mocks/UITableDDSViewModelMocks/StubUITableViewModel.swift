@@ -5,6 +5,7 @@ import XCTest
 final class StubUITableViewModel: UITableDDSViewModel<DummySection, FakeUITableViewCell> {
 	
 	var didSelectRowAtCalledCount = 0
+	
 	init(tableView: UITableView) {
 		super.init(tableView: tableView, cellReuseIdentifier: "FakeUITableViewCell")
 	}

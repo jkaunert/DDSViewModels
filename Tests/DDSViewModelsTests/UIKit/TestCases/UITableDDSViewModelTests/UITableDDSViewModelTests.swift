@@ -24,7 +24,7 @@ final class UITableDDSViewModelTests: XCTestCase {
 	
 	private var snapshot: Snapshot!
 	
-	private var sut: UITableDDSViewModel<DummySection, FakeUITableViewCell>!
+	private var sut: StubUITableViewModel!
 	
 	override func setUpWithError() throws {
 		
@@ -83,8 +83,7 @@ final class UITableDDSViewModelTests: XCTestCase {
 			XCTAssertNotNil(try XCTUnwrap(tableVC.tableView))
 		}
 	
-	func test_init() {
-				
+	func test_init_viewModelShouldNotBeNil() {
 		XCTAssertNotNil(sut)
 	}
 	
@@ -97,25 +96,25 @@ final class UITableDDSViewModelTests: XCTestCase {
 	
 		let e1 = expectation(description: "test_apply_whenAppendingItemsToMainSection_shouldDiffCorrectly() e1")
 		dataSource.apply(snapshot, completion: e1.fulfill)
-		wait(for: [e1], timeout: 1)
+		wait(for: [e1], timeout: 0.001)
 		snapshot.appendSections([dummySection1])
 		snapshot.appendItems([section1DummyItems[0]])
 		XCTAssertEqual(snapshot.numberOfItems, 1)
 
 		let e2 = expectation(description: "test_apply_whenAppendingItemsToMainSection_shouldDiffCorrectly() e2")
 		dataSource.apply(snapshot, completion: e2.fulfill)
-		wait(for: [e2], timeout: 1)
+		wait(for: [e2], timeout: 0.001)
 		XCTAssertEqual(snapshot.numberOfItems, 1)
 
 		let e3 = expectation(description: "test_apply_whenAppendingItemsToMainSection_shouldDiffCorrectly() e3")
 		dataSource.apply(snapshot, completion: e3.fulfill)
-		wait(for: [e3], timeout: 1)
+		wait(for: [e3], timeout: 0.001)
 		snapshot.appendItems([section1DummyItems[1]])
 		XCTAssertEqual(snapshot.numberOfItems, 2)
 
 		let e4 = expectation(description: "test_apply_whenAppendingItemsToMainSection_shouldDiffCorrectly() e4")
 		dataSource.apply(snapshot, completion: e4.fulfill)
-		wait(for: [e4], timeout: 1)
+		wait(for: [e4], timeout: 0.001)
 		XCTAssertEqual(snapshot.numberOfItems, 2)
 	}
 
@@ -123,20 +122,20 @@ final class UITableDDSViewModelTests: XCTestCase {
 	
 		let e1 = expectation(description: "test_apply_whenRemovingItemsFromMainSection_shouldDiffCorrectly() e1")
 		dataSource.apply(snapshot, completion: e1.fulfill)
-		wait(for: [e1], timeout: 1)
+		wait(for: [e1], timeout: 0.001)
 		snapshot.appendSections([dummySection1])
 		snapshot.appendItems([section1DummyItems[0], section1DummyItems[1]])
 		XCTAssertEqual(snapshot.numberOfItems, 2)
 
 		let e2 = expectation(description: "test_apply_whenRemovingItemsFromMainSection_shouldDiffCorrectly() e2")
 		dataSource.apply(snapshot, completion: e2.fulfill)
-		wait(for: [e2], timeout: 1)
+		wait(for: [e2], timeout: 0.001)
 		snapshot.deleteItems([section1DummyItems[0]])
 		XCTAssertEqual(snapshot.numberOfItems, 1)
 
 		let e3 = expectation(description: "test_apply_whenRemovingItemsFromMainSection_shouldDiffCorrectly() e3")
 		dataSource.apply(snapshot, completion: e3.fulfill)
-		wait(for: [e3], timeout: 1)
+		wait(for: [e3], timeout: 0.001)
 		snapshot.appendItems([
 			section1DummyItems[1],
 			section1DummyItems[2],
@@ -149,7 +148,7 @@ final class UITableDDSViewModelTests: XCTestCase {
 
 		let e4 = expectation(description: "test_apply_whenRemovingItemsFromMainSection_shouldDiffCorrectly() e4")
 		dataSource.apply(snapshot, completion: e4.fulfill)
-		wait(for: [e4], timeout: 1)
+		wait(for: [e4], timeout: 0.001)
 		snapshot.deleteItems([section1DummyItems[3]])
 		XCTAssertEqual(snapshot.numberOfItems, 1)
 	}
@@ -158,7 +157,7 @@ final class UITableDDSViewModelTests: XCTestCase {
 		let e1 = expectation(description: "test_add_whenAddingOneItemToSection_shouldAppendItemToSectionItems() e1")
 		
 		sut.add([DummyItem(text: "DummyItem")], toSection: &sut.sections[0]) { e1.fulfill() }
-		wait(for: [e1], timeout: 1)
+		wait(for: [e1], timeout: 0.001)
 		XCTAssertEqual(sut.sections[0].items.count, 1)
 	}
 	
@@ -168,14 +167,14 @@ final class UITableDDSViewModelTests: XCTestCase {
 		let e1 = expectation(description: "test_remove_whenRemovingOneItemFromOneSection_shouldRemoveItemFromSectionItems() e1")
 		
 		sut.add([dummyItem], toSection: &sut.sections[0]) { e1.fulfill() }
-		wait(for: [e1], timeout: 1)
+		wait(for: [e1], timeout: 0.001)
 		XCTAssertEqual(sut.sections[0].items.count, 1, "precondition")
 		
 		let e2 = expectation(description: "test_remove_whenRemovingOneItemFromOneSection_shouldRemoveItemFromSectionItems() e2")
 		sut.remove([dummyItem], fromSection: &sut.sections[0]) {
 			e2.fulfill()
 		}
-		wait(for: [e2], timeout: 1)
+		wait(for: [e2], timeout: 0.001)
 		XCTAssertEqual(sut.sections[0].items.count, 0)
 	}
 	
@@ -183,7 +182,7 @@ final class UITableDDSViewModelTests: XCTestCase {
 		
 		let e1 = expectation(description: "test_apply_whenRemovingAllItemsFromMainSection_shouldDiffCorrectly() e1")
 		dataSource.apply(snapshot, completion: e1.fulfill)
-		wait(for: [e1], timeout: 1)
+		wait(for: [e1], timeout: 0.001)
 		snapshot.appendSections([dummySection1])
 		snapshot.appendItems([
 			section1DummyItems[0],
@@ -195,68 +194,43 @@ final class UITableDDSViewModelTests: XCTestCase {
 		snapshot.deleteAllItems()
 		XCTAssertEqual(snapshot.numberOfItems, 0)
 	}
-	
-//	func test_add() {
-//
-//		let e1 = expectation(description: "test_add() e1")
-//		sut.add([section1DummyItems[0]], to: dummySection1) {
-//			e1.fulfill()
-//		}
-//		wait(for: [e1], timeout: 1)
-//		XCTAssertEqual(sut.secitems.count, 1)
-//
-//		let e2 = expectation(description: "test_add() e2")
-//		sut.add([], to: dummySection1) {
-//			e2.fulfill()
-//		}
-//		wait(for: [e2], timeout: 0.001)
-//		XCTAssertEqual(sut.items.count, 1)
-//
-//		let e3 = expectation(description: "test_add() e3")
-//		sut.add([section1DummyItems[1]], to: dummySection1) {
-//			e3.fulfill()
-//		}
-//		wait(for: [e3], timeout: 0.001)
-//		XCTAssertEqual(sut.items.count, 2)
-//
-//		let e4 = expectation(description: "test_add() e4")
-//		sut.add([], to: dummySection1) {
-//			e4.fulfill()
-//		}
-//		wait(for: [e4], timeout: 0.001)
-//		XCTAssertEqual(sut.items.count, 2)
-//	}
 
-//	func test_remove() {
-//
-//		let e1 = expectation(description: "test_remove() e1")
-//		sut.add([
-//			section1DummyItems[0],
-//			section1DummyItems[1],
-//			section1DummyItems[2],
-//			section1DummyItems[3],
-//		], to: dummySection1)
-//		XCTAssertEqual(sut.items.count, 4, "precondition")
-//		sut.remove([section1DummyItems[0]], from: dummySection1) {
-//			e1.fulfill()
-//		}
-//		wait(for: [e1], timeout: 0.001)
-//		XCTAssertEqual(sut.items.count, 3)
-//
-//		let e2 = expectation(description: "test_remove() e2")
-//		sut.remove([section1DummyItems[2]], from: dummySection1) {
-//			e2.fulfill()
-//		}
-//		wait(for: [e2], timeout: 0.001)
-//		XCTAssertEqual(sut.items.count, 2)
-//
-//		let e3 = expectation(description: "test_remove() e3")
-//		sut.remove([section1DummyItems[1]], from: dummySection1) {
-//			e3.fulfill()
-//		}
-//		wait(for: [e3], timeout: 0.001)
-//		XCTAssertEqual(sut.items.count, 1)
-//	}
+	func test_snapshot_removeAll_shouldRemoveAllItemsFromAllSectionItemArrays() {
+		
+		let e1 = expectation(description: "test_snapshot_removeAll_shouldRemoveAllItemsFromOwningSectionsItems() e1")
+		sut.add(section1DummyItems, toSection: &sut.sections[0])
+		sut.add(section2DummyItems, toSection: &sut.sections[1]) { e1.fulfill() }
+		wait(for: [e1], timeout: 0.001)
+		XCTAssertEqual(section1DummyItems.count, sut.sections[0].items.count, "precondition, section[0] setup")
+		XCTAssertEqual(section2DummyItems.count, sut.sections[1].items.count, "precondition, section[1] setup")
+		
+		let e2 = expectation(description: "test_snapshot_removeAll_shouldRemoveAllItemsFromOwningSectionsItems() e2")
+		sut.removeAllItems() {
+			e2.fulfill()
+		}
+		wait(for: [e2], timeout: 0.001)
+		XCTAssertEqual(sut.sections[0].items.count, 0)
+		XCTAssertEqual(sut.sections[1].items.count, 0)
+	}
+	
+	func test_move_whenMovingItemsFromSection0ToSection1_shouldRemoveItemsFromSection0ItemsAndAddThemToSection1() {
+		
+		let e1 = expectation(description: "test_move_whenMovingItemsFromSection0ToSection1_shouldRemoveItemsFromSection0ItemsAndAddThemToSection1() e1")
+		sut.add([], toSection: &dummySection2)
+		sut.add(section1DummyItems, toSection: &dummySection1) { e1.fulfill() }
+		wait(for: [e1], timeout: 0.001)
+		XCTAssertEqual(dummySection2.items.count, 0, "precondition, section[0] setup")
+		XCTAssertEqual(section1DummyItems.count, dummySection1.items.count, "precondition, section[0] setup")
+		
+		let e2 = expectation(description: "test_move_whenMovingItemsFromSection0ToSection1_shouldRemoveItemsFromSection0ItemsAndAddThemToSection1() e2")
+		sut.move(section1DummyItems, fromSection: &dummySection1, toSection: &dummySection2) {
+			e2.fulfill()
+		}
+		wait(for: [e2], timeout: 0.001)
+		XCTAssertEqual(dummySection1.items.count, 0)
+		XCTAssertEqual(dummySection2.items.count, section1DummyItems.count)
+		XCTAssertEqual(dummySection2.items, section1DummyItems)
+	}
 	
 	func test_snapshot() {
 		
@@ -400,6 +374,7 @@ final class UITableDDSViewModelTests: XCTestCase {
 		
 		let dataSourceCell = dataSource.tableView(tableVC.tableView, cellForRowAt:  IndexPath(item: 0, section: 0)) as? FakeUITableViewCell
 		dataSourceCell?.provide(section1DummyItems[1])
+		
 		XCTAssertEqual(
 			dataSourceCell?.textLabel?.text,
 			sutCell?.textLabel?.text
@@ -419,6 +394,25 @@ final class UITableDDSViewModelTests: XCTestCase {
 			dataSource.tableView(tableVC.tableView, canMoveRowAt: IndexPath(item: 1, section: 0)),
 			false
 		)
+	}
+	
+	func test_didSelectRowAt() {
+		
+			snapshot.appendSections([dummySection1])
+			snapshot.appendItems([
+				section1DummyItems[0],
+				section1DummyItems[1],
+				section1DummyItems[2]
+			], toSection: dummySection1)
+			dataSource.apply(snapshot)
+
+			let sutCell = tableVC.tableView.dequeueReusableCell(withIdentifier: "FakeUITableViewCell", for: IndexPath(item: 0, section: 0)) as? FakeUITableViewCell
+			sutCell?.provide(section1DummyItems[1])
+			
+			sut.tableView(tableVC.tableView, didSelectRowAt: IndexPath(row: 0, section: 0))
+			
+			XCTAssertEqual(sut.didSelectRowAtCalledCount, 1)
+		
 	}
 	
 	func test_moveRowAt() throws {
