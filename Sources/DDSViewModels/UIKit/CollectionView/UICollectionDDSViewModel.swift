@@ -56,6 +56,13 @@ public extension UICollectionDDSViewModel {
 		completion?()
 	}
 	
+	private func removeAll(_ sections: inout [Section], animate: Bool = true) {
+		sections.mutatingForEach { section in
+			section.items.removeAll()
+		}
+		update(animatingDifferences: animate)
+	}
+	
 	func update(animatingDifferences: Bool = true, completion: (() -> Void)? = nil) {
 		applySnapshot(animatingDifferences: animatingDifferences)
 		completion?()
@@ -73,9 +80,15 @@ public extension UICollectionDDSViewModel {
 		completion?()
 	}
 	
+	func removeAllItems(completion: (() -> Void)? = nil) {
+		removeAll(&sections)
+		completion?()
+	}
+	
 	func move(_ items: [Item], fromSection: inout Section, toSection: inout Section, animate: Bool = true, completion: (() -> Void)? = nil) {
 		
 		remove(items, fromSection: &fromSection, animate: animate)
+		
 		add(items, toSection: &toSection, animate: animate)
 		completion?()
 	}

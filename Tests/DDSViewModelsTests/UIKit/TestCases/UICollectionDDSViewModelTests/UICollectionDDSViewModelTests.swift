@@ -185,6 +185,24 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		XCTAssertEqual(sut.sections[0].items.count, 1)
 	}
 
+	func test_snapshot_removeAll_shouldRemoveAllItemsFromAllSectionItemArrays() {
+		
+		let e1 = expectation(description: "test_snapshot_removeAll_shouldRemoveAllItemsFromOwningSectionsItems() e1")
+		sut.add(section1DummyItems, toSection: &sut.sections[0])
+		sut.add(section2DummyItems, toSection: &sut.sections[1]) { e1.fulfill() }
+		wait(for: [e1], timeout: 0.001)
+		XCTAssertEqual(section1DummyItems.count, sut.sections[0].items.count, "precondition, section[0] setup")
+		XCTAssertEqual(section2DummyItems.count, sut.sections[1].items.count, "precondition, section[1] setup")
+		
+		let e2 = expectation(description: "test_snapshot_removeAll_shouldRemoveAllItemsFromOwningSectionsItems() e2")
+		sut.removeAllItems() {
+			e2.fulfill()
+		}
+		wait(for: [e2], timeout: 0.001)
+		XCTAssertEqual(sut.sections[0].items.count, 0)
+		XCTAssertEqual(sut.sections[1].items.count, 0)
+	}
+	
 	func test_remove_whenRemovingOneItemFromOneSection_shouldRemoveItemFromSectionItems() {
 		
 		let dummyItem = DummyItem(text: "DummyItem")
@@ -202,6 +220,25 @@ final class UICollectionDDSViewModelTests: XCTestCase {
 		XCTAssertEqual(sut.sections[0].items.count, 0)
 	}
 		
+	func test_move_whenMovingItemsFromSection0ToSection1_shouldRemoveItemsFromSection0ItemsAndAddThemToSection1() {
+		
+		let e1 = expectation(description: "test_move_whenMovingItemsFromSection0ToSection1_shouldRemoveItemsFromSection0ItemsAndAddThemToSection1() e1")
+		sut.add([], toSection: &dummySection2)
+		sut.add(section1DummyItems, toSection: &dummySection1) { e1.fulfill() }
+		wait(for: [e1], timeout: 0.001)
+		XCTAssertEqual(dummySection2.items.count, 0, "precondition, section[0] setup")
+		XCTAssertEqual(section1DummyItems.count, dummySection1.items.count, "precondition, section[0] setup")
+		
+		let e2 = expectation(description: "test_move_whenMovingItemsFromSection0ToSection1_shouldRemoveItemsFromSection0ItemsAndAddThemToSection1() e2")
+		sut.move(section1DummyItems, fromSection: &dummySection1, toSection: &dummySection2) {
+			e2.fulfill()
+		}
+		wait(for: [e2], timeout: 0.001)
+		XCTAssertEqual(dummySection1.items.count, 0)
+		XCTAssertEqual(dummySection2.items.count, section1DummyItems.count)
+		XCTAssertEqual(dummySection2.items, section1DummyItems)
+	}
+	
 	func test_snapshot() {
 		
 		let snapshot1 = dataSource.snapshot()
