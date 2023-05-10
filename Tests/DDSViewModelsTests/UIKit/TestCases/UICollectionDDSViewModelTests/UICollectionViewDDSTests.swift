@@ -67,26 +67,27 @@ final class UICollectionViewDDSTests: XCTestCase {
 	func test_snapshotApply_shouldCallPerformBatchUpdatesAsExpected() {
 		
 		let e1 = expectation(description: "test_snapshotApply_shouldCallPerformBatchUpdatesAsExpected() e1")
-		sut.apply(snapshot, completion: e1.fulfill)
-		wait(for: [e1], timeout: 1)
-		XCTAssertEqual(collectionView.performBatchUpdatesCalledCount, 1)
 		snapshot.appendSections([sections[0]])
 		snapshot.appendItems([items[0]])
+		sut.apply(snapshot, completion: e1.fulfill)
+		wait(for: [e1], timeout: 0.001)
+		XCTAssertEqual(collectionView.performBatchUpdatesCalledCount, 1)
+		
 		
 		let e2 = expectation(description: "test_snapshotApply_shouldCallPerformBatchUpdatesAsExpected() e2")
 		sut.apply(snapshot, completion: e2.fulfill)
-		wait(for: [e2], timeout: 1)
+		wait(for: [e2], timeout: 0.001)
 		XCTAssertEqual(collectionView.performBatchUpdatesCalledCount, 2)
 		
 		let e3 = expectation(description: "test_snapshotApply_shouldCallPerformBatchUpdatesAsExpected() e3")
-		sut.apply(snapshot, completion: e3.fulfill)
-		wait(for: [e3], timeout: 1)
-		XCTAssertEqual(collectionView.performBatchUpdatesCalledCount, 3)
 		snapshot.appendItems([items[1]])
-		
+		sut.apply(snapshot, completion: e3.fulfill)
+		wait(for: [e3], timeout: 0.001)
+		XCTAssertEqual(collectionView.performBatchUpdatesCalledCount, 3)
+
 		let e4 = expectation(description: "test_snapshotApply_shouldCallPerformBatchUpdatesAsExpected() e4")
 		sut.apply(snapshot, completion: e4.fulfill)
-		wait(for: [e4], timeout: 1)
+		wait(for: [e4], timeout: 0.001)
 		XCTAssertEqual(collectionView.performBatchUpdatesCalledCount, 4)
 	}
 	
