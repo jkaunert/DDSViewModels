@@ -5,7 +5,7 @@ import Combine
 
 final class FakeUITableViewController: UIViewController {
 	
-	var tableView = MockUITableView()
+	lazy var tableView = MockUITableView()
 	
 	private var cancellables = [AnyCancellable]()
 	
@@ -20,10 +20,6 @@ final class FakeUITableViewController: UIViewController {
 	private func configureTableView() {
 		tableView.dataSource = viewModel.makeDiffableDataSource()
 		
-		tableView.register(FakeUITableViewCell.self, forCellReuseIdentifier: "FakeUITableViewCell")
-		
-		tableView.delegate = viewModel
-
 	}
 }
 #endif
