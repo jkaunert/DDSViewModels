@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
 	name: "DDSViewModels",
-	platforms: [.iOS(.v15),.tvOS(.v15), .macOS(.v12),],
+	platforms: [.iOS(.v15), .tvOS(.v15),],
 	products: [
 		
 		.library(

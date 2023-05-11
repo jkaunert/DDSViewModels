@@ -11,10 +11,3 @@ public protocol DiffableSection: Hashable {
 	static func returnSections() -> [Self]
 }
 
-extension MutableCollection {
-	mutating func mutatingForEach(_ body: (inout Element) throws -> Void) rethrows {
-		for index in self.indices {
-			try body(&self[index])
-		}
-	}
-}
