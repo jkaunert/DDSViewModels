@@ -7,7 +7,7 @@
 
 
 
-#### If you like the project, please give it a star ⭐ It will show the creator your appreciation and help others to discover the repo.
+#### If you like the project, please give it a star ⭐ It will show your appreciation and help others to discover this repo.
 
 ---
 
