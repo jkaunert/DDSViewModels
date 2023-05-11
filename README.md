@@ -17,7 +17,7 @@
 
 
 - **Lightweight**
-    - Two protocols. Two Classes. Two Reusable Views. 
+    - Two Protocols. Two Classes. Two Reusable Views. One Purpose.
 - **Flexible**
     - Use the provided convenience methods, or
     - Easily override default behavior to suit your specific needs.
